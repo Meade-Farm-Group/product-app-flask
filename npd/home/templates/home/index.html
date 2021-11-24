@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+    <div class="card">
+        <img src="{% static 'images/smart_farm.png' %}" class="home-image" alt="smart farm">
+        <div class="card-body">
+            <h5 class="card-title">Welcome to the Meade Product App</h5>
+            <p class="card-text">
+                The Meade Product App <i>(MPA)</i> is a bespoke internal system for new product development, 
+                designed to ensure full product specification information is gathered before the production starts.
+            </p>
+            <a href="{% url 'account_login' %}" class="btn btn-success">
+                Login <i class="fas fa-check"></i>
+            </a>
+        </div>
+    </div>
+{% endblock %}
