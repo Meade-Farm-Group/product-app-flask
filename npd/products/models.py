@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
-from ancillaries.models import Customer, Department
+from ancillaries.models import Customer, Department, Supplier
+from django.utils.translation import gettext_lazy as _
 
 
 class ProductStatus(models.Model):
