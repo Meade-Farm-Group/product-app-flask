@@ -28,4 +28,26 @@ def product_details(request, product_id):
         'exclude_fields': exclude_fields
     })
 
+
+@login_required
+def create_product(request):
+    if request.method == 'POST':
+        form = ProductForm(request.POST)
+        if form.is_valid():
+            product = form.save(commit=False)
+            product.status = ProductStatus.objects.get(status='Pending - Awaiting Sign Off')
+            product.created_by = request.user
+            product.save()
+            messages.success(request, "Product Created Successfully!")
+            return redirect(reverse(product_details, args=[product.id]))
+        else:
+            messages.error(request, "Error Creating Product! Please Try Again")
+    else:
+        form = ProductForm()
+
+    return render(request, 'products/product_form.html', {
+        'form': form
+    })
+
+
     })
