@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from ancillaries.models import Customer, Department, Supplier
 from django.utils.translation import gettext_lazy as _
+from django.utils import timezone
 
 
 class ProductStatus(models.Model):
@@ -71,6 +72,8 @@ class CommercialModel(models.Model):
     approved_origins = models.ManyToManyField(Origin)
     approved_varieties = models.ManyToManyField(Variety)
     approved_suppliers = models.ManyToManyField(Supplier)
+    created_on = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return f'{self.product} Commercial Details'
