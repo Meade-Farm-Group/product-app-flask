@@ -77,3 +77,61 @@ class CommercialModel(models.Model):
 
     def __str__(self):
         return f'{self.product} Commercial Details'
+
+
+
+class PackagingModel(models.Model):
+
+    class Grades(models.TextChoices):
+        ONE = '1', _('1')
+        TWO = '2', _('2')
+        NA = 'N/A', _('N/A')
+    
+    class PackagingTypes(models.TextChoices):
+        CARDBOARD = 'Cardboard', _('Cardboard')
+        PLASTIC = 'Plastic', _('Plastic')
+
+    # Inner Packaging
+    branding = models.CharField(max_length=20)
+    artwork_provided = models.BooleanField()
+    packaging_supplier = models.ForeignKey(
+        Supplier, 
+        null=True, 
+        on_delete=models.SET_NULL,
+        related_name="%(class)s_inner_packaging_supplier",
+    )
+    packaging_type = models.CharField(
+        max_length=20,
+        choices=PackagingTypes.choices,
+        default=PackagingTypes.CARDBOARD
+    )
+    packaging_grade = models.CharField(
+        max_length=5,
+        choices=Grades.choices,
+        default=Grades.NA
+    )
+    dimensions = models.CharField(max_length=30)
+    key_line = models.CharField(max_length=20)
+    recyclable = models.BooleanField()
+    biodegradable = models.BooleanField()
+    packaging_ordered = models.BooleanField()
+    date_ordered = models.DateField()
+    delivery_date = models.DateField()
+    packaging_in_stock = models.BooleanField()
+    # Outer Packaging
+    units_per_case = models.IntegerField()
+    material_type = models.CharField(
+        max_length=20,
+        choices=PackagingTypes.choices,
+        default=PackagingTypes.CARDBOARD
+    )
+    supplier = models.ForeignKey(
+        Supplier, 
+        null=True, 
+        on_delete=models.SET_NULL, 
+        related_name="%(class)s_outer_packaging_supplier",
+    )
+    outer_dimensions = models.CharField(max_length=30)
+
+    def __str__(self):
+        return f'{self.product} Packaging Details'
