@@ -50,4 +50,29 @@ def create_product(request):
     })
 
 
+@login_required
+def add_commercial_details(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    if request.method == 'POST':
+        form = CommercialForm(request.POST)
+        if form.is_valid():
+            commercial_details = form.save(commit=False)
+            commercial_details.product = product
+            commercial_details.created_by = request.user
+            commercial_details.save()
+            form.save_m2m()
+            messages.success(request, "Commercial Details Successfully Added!")
+            return redirect(reverse(product_details, args=[product.id]))
+        else:
+            messages.error(request, "Error Adding Commercial Details! Please Try Again")
+    else:
+        form = CommercialForm()
+    
+    return render(request, 'products/commercial_form.html', {
+        'context': 'add',
+        'product': product,
+        'form': form
+    })
+
+
     })
