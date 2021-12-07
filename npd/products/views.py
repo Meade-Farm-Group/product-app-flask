@@ -75,4 +75,24 @@ def add_commercial_details(request, product_id):
     })
 
 
+@login_required
+def edit_commercial_details(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    commercial_details = get_object_or_404(CommercialModel, product=product_id)
+
+    if request.method == 'POST':
+        form = CommercialForm(request.POST, instance=commercial_details)
+        if form.is_valid():
+            commercial_details = form.save()
+            messages.success(request, "Commercial Details Successfully Updated!")
+            return redirect(reverse(product_details, args=[product.id]))
+        else:
+            messages.error(request, "Error Updating Commercial Details! Please Try Again")
+    else:
+        form = CommercialForm(instance=commercial_details)
+    
+    return render(request, 'products/commercial_form_edit.html', {
+        'context': 'edit',
+        'product': product,
+        'form': form
     })
