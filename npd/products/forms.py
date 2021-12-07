@@ -14,3 +14,15 @@ class ProductForm(forms.ModelForm):
         ]
 
 
+class CommercialForm(forms.ModelForm):
+    """ Commercial Form """
+    class Meta:
+        model = CommercialModel
+        exclude = [
+            'product',
+            'created_on',
+            'created_by',
+        ]
+        widgets = {
+            'start_date': DateInput(),
+        }
