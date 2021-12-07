@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load lookup %}
 {% block content %}
 <div class="container">
     <h2 class="text-center">
@@ -6,15 +7,14 @@
     </h2>
     <hr>
     <div class="card">
-        <div class="card-header">
-            <h5 class="card-title text-center">
-                {{ product.product_name }}
-            </h5>
-        </div>
         <div class="card-body">
             <div class="row">
                 <div class="col-6">
                     <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <strong>Product Name:</strong>
+                            <span class="float-end">{{ product.product_name }}</span>
+                        </li>
                         <li class="list-group-item">
                             <strong>Department:</strong>
                             <span class="float-end">{{ product.department }}</span>
@@ -23,14 +23,14 @@
                             <strong>Customer:</strong>
                             <span class="float-end">{{ product.customer }}</span>
                         </li>
-                        <li class="list-group-item">
-                            <strong>Status:</strong>
-                            <span class="float-end">{{ product.status }}</span>
-                        </li>
                     </ul>
                 </div>
                 <div class="col-6">
                     <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <strong>Status:</strong>
+                            <span class="float-end">{{ product.status }}</span>
+                        </li>
                         <li class="list-group-item">
                             <strong>Created On:</strong>
                             <span class="float-end">{{ product.created_on }}</span>
@@ -43,109 +43,66 @@
                 </div>
             </div>
         </div>
-        <div class="card-footer"></div>
+        <div class="card-footer">
+            <div class="btn-group d-flex justify-content-center" role="group">
+                <button class="btn btn-danger">
+                    <i class="fas fa-times"></i> Delete
+                </button>
+                <a href="{% url 'edit_commercial_details' product.id %}" class="btn btn-warning">
+                    <i class="fas fa-edit"></i> Edit
+                </a>
+                <button class="btn btn-primary">
+                    <i class="fa fa-check"></i> Sign Off
+                </button>
+            </div>
+        </div>
     </div>
     <hr>
     <h2>Commercial Details</h2>
     <hr>
-    {{ commercial_details }}
-    {% if commercial_details %}
-        <div class="row">
+    <div class="row">
+        {% if commercial_details is not None %}
             <div class="col-6">
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item">
-                        <strong>Start Date</strong>
-                        <span class="float-end">{{ commercial_details.start_date }}</span>
-                    </li>
-                    <li class="list-group-item">
-                        <strong>Product Branding</strong>
-                        <span class="float-end">{{ commercial_details.product_branding }}</span>
-                    </li>
-                    <li class="list-group-item">
-                        <strong>Case Count</strong>
-                        <span class="float-end">{{ commercial_details.case_count }}</span>
-                    </li>
-                    <li class="list-group-item">
-                        <strong>Weight per Unit</strong>
-                        <span class="float-end">{{ commercial_details.weight_per_unit }}</span>
-                    </li>
-                    <li class="list-group-item">
-                        <strong>Delivered State</strong>
-                        <span class="float-end">{{ commercial_details.delivered_state }}</span>
-                    </li>
-                    <li class="list-group-item">
-                        <strong>Inner Barcode</strong>
-                        <span class="float-end">{{ commercial_details.product_inner_barcode }}</span>
-                    </li>
-                    <li class="list-group-item">
-                        <strong>Outer Barcode</strong>
-                        <span class="float-end">{{ commercial_details.product_outer_barcode }}</span>
-                    </li>
-                    {% for details in commercial_details %}
-                        {% for field, value in details.fields.items %}
+                    {% for key in commercial_details_keys %}
+                        {% if key.name not in exclude_fields and not forloop.counter|divisibleby:"2" %}
                             <li class="list-group-item">
-                                <strong>{{ field }}</strong>
-                                <span class="float-end">{{ value }}</span>
+                                <strong>{{ key.verbose_name|title }}</strong>
+                                {% with value=commercial_details|lookup:key.name %}
+                                    {% if value|get_type == "list" %}
+                                        <span class="float-end">{{ value.all|join:", " }}</span>
+                                    {% else %}
+                                        <span class="float-end">{{ value }}</span>
+                                    {% endif %}
+                                {% endwith %}
                             </li>
-                        {% endfor %}
+                        {% endif %}
                     {% endfor %}
                 </ul>
             </div>
             <div class="col-6">
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item">
-                        <strong>Size Diameter</strong>
-                        <span class="float-end">{{ commercial_details.size_diameter }}</span>
-                    </li>
-                    <li class="list-group-item">
-                        <strong>Storage Temperature</strong>
-                        <span class="float-end">{{ commercial_details.storage_temperature }}</span>
-                    </li>
-                    <li class="list-group-item">
-                        <strong>Display Until</strong>
-                        <span class="float-end">{{ commercial_details.display_until }}</span>
-                    </li>
-                    <li class="list-group-item">
-                        <strong>Best Before</strong>
-                        <span class="float-end">{{ commercial_details.best_before }}</span>
-                    </li>
-                    <li class="list-group-item">
-                        <strong>Julian Code</strong>
-                        <span class="float-end">{{ commercial_details.julian_code }}</span>
-                    </li>
+                    {% for key in commercial_details_keys %}
+                        {% if key.name not in exclude_fields and forloop.counter|divisibleby:"2" %}
+                            <li class="list-group-item">
+                                <strong>{{ key.verbose_name|title }}</strong>
+                                {% with value=commercial_details|lookup:key.name %}
+                                    {% if value|get_type == "list" %}
+                                        <span class="float-end">{{ value.all|join:", " }}</span>
+                                    {% else %}
+                                        <span class="float-end">{{ value }}</span>
+                                    {% endif %}
+                                {% endwith %}
+                            </li>
+                        {% endif %}
+                    {% endfor %}
                 </ul>
             </div>
-            <div class="col-6">
-                <h4>Approved Origins</h4>
-                {% if commercial_details.approved_origins.all|length > 0 %}
-                    <ul class="list-group list-group-flush">
-                        {% for origin in commercial_details.approved_origins.all %}
-                            <li class="list-group-item">
-                                {{ origin }}
-                            </li>
-                        {% endfor %}
-                    </ul>
-                {% else %}
-                    None Selected!
-                {% endif %}
-            </div>
-            <div class="col-6">
-                <h4>Approved Varieties</h4>
-                {% if commercial_details.approved_varieties.all|length > 0 %}
-                    <ul class="list-group list-group-flush">
-                        {% for variety in commercial_details.approved_varieties.all %}
-                            <li class="list-group-item">
-                                {{ variety }}
-                            </li>
-                        {% endfor %}
-                    </ul>
-                {% else %}
-                    None Selected!
-                {% endif %}
-            </div>
-        </div>
-    {% else %}
-        <h4 class="text-center">No Commercial Details Available</h4>
-    {% endif %}
+        {% else %}
+            <h4 class="text-center">
+                <i class="fas fa-exclamation-circle"></i> No Commercial Details Available!
+            </h4>
+        {% endif %}
+    </div>
 </div>
 {% endblock %}
