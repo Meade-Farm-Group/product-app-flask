@@ -79,7 +79,6 @@ class CommercialModel(models.Model):
         return f'{self.product} Commercial Details'
 
 
-
 class PackagingModel(models.Model):
 
     class Grades(models.TextChoices):
@@ -91,6 +90,7 @@ class PackagingModel(models.Model):
         CARDBOARD = 'Cardboard', _('Cardboard')
         PLASTIC = 'Plastic', _('Plastic')
 
+    product = models.OneToOneField(Product, on_delete=models.CASCADE)
     # Inner Packaging
     branding = models.CharField(max_length=20)
     artwork_provided = models.BooleanField()
@@ -132,6 +132,43 @@ class PackagingModel(models.Model):
         related_name="%(class)s_outer_packaging_supplier",
     )
     outer_dimensions = models.CharField(max_length=30)
+    outer_case_label = models.BooleanField()
+    outer_case_card = models.BooleanField()
+    case_configuration = models.CharField(max_length=20)
+    # Palletisation
+    cases_per_pallet_layer = models.IntegerField()
+    no_of_layers = models.IntegerField()
+    created_on = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return f'{self.product} Packaging Details'
+
+
+class OperationsModel(models.Model):
+
+    class TestResult(models.TextChoices):
+        OP = 'Operational', _('Operational')
+        NOTOP = 'Not Operational', _('Not Operational')
+
+    product = models.OneToOneField(Product, on_delete=models.CASCADE)
+    test_date = models.DateField()
+    packing_equipment_test = models.CharField(max_length=20)
+    test_result = models.CharField(
+        max_length=20,
+        choices=TestResult.choices,
+        default=TestResult.NOTOP
+    )
+    line_leader_trained = models.BooleanField()
+    general_staff_trained = models.BooleanField()
+    temp_storage_zone = models.CharField(max_length=20)
+    storage_space_available = models.BooleanField()
+    handling_equipment_available = models.BooleanField()
+    packaging_on_site = models.BooleanField()
+    raw_material_on_site = models.BooleanField()
+    ready_for_product_run = models.BooleanField()
+    created_on = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+
+    def __str__(self):
+        return f'{self.product} Operations Details'
