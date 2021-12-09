@@ -24,3 +24,10 @@ class Supplier(models.Model):
 
     def __str__(self):
         return self.supplier_name
+
+
+class Defect(models.Model):
+    defect_name = models.CharField(max_length=40)
+
+    def __str__(self):
+        return self.defect_name
