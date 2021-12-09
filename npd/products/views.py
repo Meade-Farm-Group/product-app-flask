@@ -51,6 +51,22 @@ def create_product(request):
 
 
 @login_required
+def edit_navigation(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    commercial_details = CommercialModel.objects.filter(product=product_id).first()
+    packaging_details = PackagingModel.objects.filter(product=product_id).first()
+    operations_details = OperationsModel.objects.filter(product=product_id).first()
+    # TODO technical details 
+
+    return render(request, 'products/edit_navigation.html', {
+        'product': product,
+        'commercial_details': commercial_details,
+        'packaging_details': packaging_details,
+        'operations_details': operations_details,
+    })
+
+
+@login_required
 def add_commercial_details(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     if request.method == 'POST':
