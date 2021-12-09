@@ -1,5 +1,5 @@
 from django import forms
-from .models import OperationsModel, PackagingModel, Product, CommercialModel
+from .models import DefectSpecification, FinishedProduct, OperationsModel, PackagingModel, Product, CommercialModel
 from ancillaries.forms import DateInput
 
 
@@ -55,3 +55,23 @@ class OperationsForm(forms.ModelForm):
         widgets = {
             'test_date': DateInput(),
         }
+
+
+class FinishedProductForm(forms.ModelForm):
+    """ Finished Product Form """
+    class Meta:
+        model = FinishedProduct
+        exclude = [
+            'product',
+            'created_on',
+            'created_by',
+        ]
+
+
+class DefectSpecificationForm(forms.ModelForm):
+    """ Defect Specification Form """
+    class Meta:
+        model = DefectSpecification
+        exclude = [
+            'product',
+        ]
