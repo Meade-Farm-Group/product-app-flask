@@ -18,13 +18,21 @@ def all_products(request):
 def product_details(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
 
+    # fields we don't want displayed in the template
     exclude_fields = ["id", "product"]
+    # we want the commercial_details variable to return none if they haven't been added
     commercial_details = CommercialModel.objects.filter(product=product_id).first()
+    packaging_details = PackagingModel.objects.filter(product=product_id).first()
+    operations_details = OperationsModel.objects.filter(product=product_id).first()
 
     return render(request, 'products/product_details.html', {
         'product': product,
         'commercial_details': commercial_details,
         'commercial_details_keys': CommercialModel._meta.get_fields(),
+        'packaging_details': packaging_details,
+        'packaging_details_keys': PackagingModel._meta.get_fields(),
+        'operations_details': operations_details,
+        'operations_details_keys': OperationsModel._meta.get_fields(),
         'exclude_fields': exclude_fields
     })
 
