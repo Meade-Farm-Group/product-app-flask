@@ -172,3 +172,34 @@ class OperationsModel(models.Model):
 
     def __str__(self):
         return f'{self.product} Operations Details'
+
+
+class FinishedProduct(models.Model):
+
+    product = models.OneToOneField(Product, on_delete=models.CASCADE)
+    declared_weight_volume = models.CharField(max_length=20)
+    tare_weight = models.CharField(max_length=20)
+    minimum_weight_volume = models.CharField(max_length=20)
+    target_weight_volume = models.CharField(max_length=20)
+    maximum_weight_volume = models.CharField(max_length=20)
+    e_mark = models.BooleanField()
+    average_weight = models.CharField(max_length=20)
+    created_on = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+
+    def __str__(self):
+        return f'{self.product} Finished Product Specification'
+
+
+class DefectSpecification(models.Model):
+
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    defect = models.ForeignKey(Defect, on_delete=models.CASCADE)
+    amber = models.DecimalField(max_digits=4, decimal_places=2)
+    red = models.DecimalField(max_digits=4, decimal_places=2)
+    comment = models.CharField(max_length=30)
+
+    def __str__(self):
+        return f'{self.product} - {self.defect} Defect Specification'
+
+
