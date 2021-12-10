@@ -53,13 +53,27 @@
             </div>
           </nav>
     </header>
-    <main class="pt-3">
+    <main class="pt-3 pb-4">
         <div class="container-fluid">
             {% if messages %}
                 {% for message in messages %}
-                    <div class="alert alert-success text-center">
-                        <strong>Success:</strong> {{ message }} <i class="fas fa-check"></i>
-                    </div>
+                    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                        <div class="alert alert-danger text-center">
+                            <strong>Error:</strong> {{ message }} <i class="fas fa-times"></i>
+                        </div>
+                    {% elif message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                        <div class="alert alert-success text-center">
+                            <strong>Success:</strong> {{ message }} <i class="fas fa-check"></i>
+                        </div>
+                    {% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+                        <div class="alert alert-warning text-center">
+                            <strong>Warning:</strong> {{ message }} <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                    {% elif message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
+                        <div class="alert alert-info text-center">
+                            <strong>Info:</strong> {{ message }} <i class="fas fa-exclamation-circle"></i>
+                        </div>
+                    {% endif %}
                 {% endfor %}
             {% endif %}
             {% block content %}
