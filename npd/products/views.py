@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.contrib.auth.decorators import login_required
-from .models import CommercialModel, Product, ProductStatus
-from .forms import CommercialForm, ProductForm
+from .models import CommercialModel, DefectSpecification, FinishedProduct, OperationsModel, PackagingModel, Product, ProductStatus
+from .forms import CommercialForm, DefectSpecificationForm, FinishedProductForm, OperationsForm, PackagingForm, ProductForm
 from django.contrib import messages
 
 
@@ -114,7 +114,12 @@ def edit_commercial_details(request, product_id):
             messages.error(request, "Error Updating Commercial Details! Please Try Again")
     else:
         form = CommercialForm(instance=commercial_details)
-    
+
+    return render(request, 'products/commercial_form.html', {
+        'context': 'edit',
+        'product': product,
+        'form': form
+    })
 
 
 @login_required
