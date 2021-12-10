@@ -153,6 +153,27 @@ def add_packaging_details(request, product_id):
         'form': form
     })
 
+
+@login_required
+def edit_packaging_details(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    packaging_details = get_object_or_404(PackagingModel, product=product_id)
+
+    if request.method == 'POST':
+        form = PackagingForm(request.POST, instance=packaging_details)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Packaging Details Successfully Updated!")
+            return redirect(reverse(product_details, args=[product.id]))
+    else:
+        form = PackagingForm(instance=packaging_details)
+
+    return render(request, 'products/packaging_form.html', {
+        'context': 'edit',
+        'product': product,
+        'form': form
+    })
+
         'context': 'edit',
         'product': product,
         'form': form
