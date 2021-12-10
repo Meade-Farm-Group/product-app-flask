@@ -203,3 +203,7 @@ class DefectSpecification(models.Model):
         return f'{self.product} - {self.defect} Defect Specification'
 
 
+class ProphetModel(models.Model):
+    product = models.OneToOneField(Product, on_delete=models.CASCADE)
+    product_created = models.BooleanField()
+    bom_created = models.Boolean
