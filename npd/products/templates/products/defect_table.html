@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-10">
+            <h2 class="text-center">
+                Defect List: {{ product.product_name }}
+            </h2>
+        </div>
+        <div class="col-2">
+            <a href="{% url 'add_defect_specification' product.id %}" class="btn btn-lg btn-success">
+                <i class="fas fa-plus"></i>
+                Add
+            </a>
+        </div>
+    </div>
+    <hr>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Defect</th>
+                    <th>Amber</th>
+                    <th>Red</th>
+                    <th>Comment</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for defect in defects %}
+                    <tr>
+                        <th>{{ defect.defect }}</th>
+                        <td>{{ defect.amber }} %</td>
+                        <td>{{ defect.red }} %</td>
+                        <td>{{ defect.comment }}</td>
+                        <td>
+                            <div class="btn-group">
+                                <a href="{% url 'edit_defect_specification' product.id defect.id %}" class="btn btn-warning">Edit</a>
+                                <a href="{% url 'delete_defect_specification' product.id defect.id %}" class="btn btn-danger">Delete</a>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
