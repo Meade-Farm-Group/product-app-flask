@@ -1,0 +1,48 @@
+<div class="row">
+    {% if details is not None %}
+        {% for key in keys %}
+
+            {% if key.name not in exclude_fields %}
+
+                <div class="col-12 col-md-6">
+                    <strong>{{ key.verbose_name|title }}</strong>
+                    {% with value=details|lookup:key.name %}
+                        {% if value|get_type == "list" %}
+                            <span class="float-end">{{ value.all|join:", " }}</span>
+                        {% else %}
+                            {% if value == "True" %}
+                                <span class="float-end">
+                                    <i class="fas fa-check text-success"></i>
+                                </span>
+                            {% elif value == "False" %}
+                                <span class="float-end">
+                                    <i class="fas fa-times text-danger"></i>
+                                </span>
+                            {% else %}
+                                <span class="float-end">{{ value }}</span>
+                            {% endif %}
+                        {% endif %}
+                    {% endwith %}
+                </div>
+
+                {% if forloop.counter|divisibleby:"2" and not forloop.last %}
+                    <div class="col-12">
+                        <hr>
+                    </div>
+                {% else %}
+                    <div class="d-md-none col-12">
+                        <hr>
+                    </div>
+                {% endif %}
+
+            {% endif %}
+
+        {% endfor %}
+    
+    {% else %}
+        <h4 class="text-center">
+            <i class="fas fa-exclamation-circle"></i> No Commercial Details Available!
+        </h4>
+    {% endif %}
+
+</div>
