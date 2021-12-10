@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h2 class="text-center">Edit Packaging Details For Product: {{ product.product_name }}</h2>
+    <hr>
+    <div class="row">
+        <div class="col-12 d-flex justify-content-center mb-2">
+            {% if palletisation is None %}
+                <a href="{% url 'add_palletisation_spec' product.id %}" class="btn btn-lg btn-primary">
+                    Add Palletisation Specification
+                </a>
+            {% else %}
+                <a href="{% url 'edit_palletisation_spec' product.id %}" class="btn btn-lg btn-warning">
+                    Edit Palletisation Specification
+                </a>
+            {% endif %}
+        </div>
+        <hr>
+        <div class="col-12 d-flex justify-content-center mb-2">
+            <a href="{% url 'inner_packaging_table' product.id %}" class="btn btn-lg btn-primary">
+                View Inner Packaging Products
+            </a>
+        </div>
+        <div class="col-12 d-flex justify-content-center mb-2">
+            <a href="#" class="btn btn-lg btn-primary">
+                View Outer Packaging Products
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

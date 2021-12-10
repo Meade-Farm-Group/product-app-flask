@@ -149,3 +149,75 @@ class ProphetModel(models.Model):
         return f'{self.product} Prophet Model'
 
 
+class InnerPackaging(models.Model):
+    class PackagingTypes(models.TextChoices):
+        CARDBOARD = 'Cardboard', _('Cardboard')
+        PLASTIC = 'Plastic', _('Plastic')
+
+    class Grades(models.TextChoices):
+        ONE = '1', _('1')
+        TWO = '2', _('2')
+        NA = 'N/A', _('N/A')
+
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    branding = models.CharField(max_length=20)
+    artwork_provided = models.BooleanField()
+    supplier = models.ForeignKey(Supplier, null=True, on_delete=models.SET_NULL)
+    packaging_type = models.CharField(
+        max_length=20,
+        choices=PackagingTypes.choices,
+        default=PackagingTypes.CARDBOARD
+    )
+    packaging_grade = models.CharField(
+        max_length=5,
+        choices=Grades.choices,
+        default=Grades.NA
+    )
+    dimensions = models.CharField(max_length=30)
+    key_line = models.CharField(max_length=20)
+    recyclable = models.BooleanField()
+    biodegradable = models.BooleanField()
+    packaging_ordered = models.BooleanField()
+    date_ordered = models.DateField()
+    delivery_date = models.DateField()
+    packaging_in_stock = models.BooleanField()
+    created_on = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+
+    def __str__(self):
+        return f'{self.product} Inner Packaging Details'
+
+
+class OuterPackaging(models.Model):
+    class PackagingTypes(models.TextChoices):
+        CARDBOARD = 'Cardboard', _('Cardboard')
+        PLASTIC = 'Plastic', _('Plastic')
+
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    units_per_case = models.IntegerField()
+    material_type = models.CharField(
+        max_length=20,
+        choices=PackagingTypes.choices,
+        default=PackagingTypes.CARDBOARD
+    )
+    supplier = models.ForeignKey(Supplier, null=True, on_delete=models.SET_NULL)
+    outer_dimensions = models.CharField(max_length=30)
+    outer_case_label = models.BooleanField()
+    outer_case_card = models.BooleanField()
+    case_configuration = models.CharField(max_length=20)
+    created_on = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+
+    def __str__(self):
+        return f'{self.product} Outer Packaging Details'
+
+
+class Palletisation(models.Model):
+    product = models.OneToOneField(Product, on_delete=models.CASCADE)
+    cases_per_pallet_layer = models.IntegerField()
+    no_of_layers = models.IntegerField()
+    created_on = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+
+    def __str__(self):
+        return f'{self.product} Palletisation Details'

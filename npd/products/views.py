@@ -365,3 +365,121 @@ def edit_prophet_details(request, product_id):
     })
 
 
+@login_required
+def packaging_navigation(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    palletisation = Palletisation.objects.filter(product=product_id).first()
+
+    return render(request, 'products/packaging_navigation.html', {
+        'product': product,
+        'palletisation': palletisation,
+    })
+
+
+@login_required
+def add_palletisation_spec(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    if len(Palletisation.objects.filter(product=product_id)) > 0:
+        messages.error(request, f"Palletisation Details Already Submitted For {product.product_name}")
+        return redirect(reverse(product_details, args=[product.id]))
+    if request.method == 'POST':
+        form = PalletisationForm(request.POST)
+        if form.is_valid():
+            palletisation_details = form.save(commit=False)
+            palletisation_details.product = product
+            palletisation_details.created_by = request.user
+            palletisation_details.save()
+            messages.success(request, "Palletisation Details Successfully Added!")
+            return redirect(reverse(product_details, args=[product.id]))
+        else:
+            messages.error(request, "Error Adding Palletisation Details! Please Try Again")
+    else:
+        form = PalletisationForm()
+    
+    return render(request, 'products/palletisation_form.html', {
+        'context': 'add',
+        'product': product,
+        'form': form
+    })
+
+
+@login_required
+def edit_palletisation_spec(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    palletisation_details = get_object_or_404(Palletisation, product=product_id)
+
+    if request.method == 'POST':
+        form = PalletisationForm(request.POST, instance=palletisation_details)
+        if form.is_valid():
+            palletisation_details = form.save()
+            messages.success(request, "Palletisation Details Successfully Updated")
+            return redirect(reverse(product_details, args=[product.id]))
+        else:
+            messages.error(request, "Error Updating Palletisation Details! Please Try Again")
+    else:
+        form = PalletisationForm(instance=palletisation_details)
+
+    return render(request, 'products/palletisation_form.html', {
+        'context': 'edit',
+        'product': product,
+        'form': form
+    })
+
+
+@login_required
+def inner_packaging_table(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    inner_packaging = InnerPackaging.objects.filter(product=product)
+
+    return render(request, 'products/inner_packaging_table.html', {
+        'product': product,
+        'inner_packaging': inner_packaging,
+    })
+
+
+@login_required
+def add_inner_packaging(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+
+    if request.method == 'POST':
+        form = InnerPackagingForm(request.POST)
+        if form.is_valid():
+            inner_packaging = form.save(commit=False)
+            inner_packaging.product = product
+            inner_packaging.created_by = request.user
+            inner_packaging.save()
+            messages.success(request, "Inner Packaging Details Successfully Added!")
+            return redirect(reverse(product_details, args=[product.id]))
+        else:
+            messages.error(request, "Error Adding Inner Packaging Details! Please Try Again")
+    else:
+        form = InnerPackagingForm()
+    
+    return render(request, 'products/inner_packaging_form.html', {
+        'context': 'add',
+        'product': product,
+        'form': form
+    })
+
+
+@login_required
+def edit_inner_packaging(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    inner_packaging = get_object_or_404(InnerPackaging, product=product_id)
+
+    if request.method == 'POST':
+        form = InnerPackagingForm(request.POST, instance=inner_packaging)
+        if form.is_valid():
+            inner_packaging = form.save()
+            messages.success(request, "Inner Packaging Details Successfully Updated")
+            return redirect(reverse(product_details, args=[product.id]))
+        else:
+            messages.error(request, "Error Updating Inner Packaging Details! Please Try Again")
+    else:
+        form = InnerPackagingForm(instance=inner_packaging)
+
+    return render(request, 'products/inner_packaging_form.html', {
+        'context': 'edit',
+        'product': product,
+        'form': form
+    })
