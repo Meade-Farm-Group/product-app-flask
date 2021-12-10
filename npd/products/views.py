@@ -339,3 +339,16 @@ def edit_defect_specification(request, product_id, defect_spec_id):
         'defect_spec': defect_spec,
         'form': form
     })
+
+
+@login_required
+def product_defects(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    defects = DefectSpecification.objects.filter(product=product)
+
+    return render(request, 'products/defect_table.html', {
+        'product': product,
+        'defects': defects,
+    })
+
+
