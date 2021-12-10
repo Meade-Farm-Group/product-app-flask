@@ -174,6 +174,35 @@ def edit_packaging_details(request, product_id):
         'form': form
     })
 
+
+@login_required
+def add_operations_details(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    if len(OperationsModel.objects.filter(product=product_id)) > 0:
+        messages.error(request, f"Operations Details Already Submitted For {product.product_name}")
+        return redirect(reverse(product_details, args=[product.id]))
+    if request.method == 'POST':
+        form = OperationsForm(request.POST)
+        if form.is_valid():
+            operations_details = form.save(commit=False)
+            operations_details.product = product
+            operations_details.created_by = request.user
+            operations_details.save()
+            form.save_m2m()
+            messages.success(request, "Operational Details Successfully Added!")
+            return redirect(reverse(product_details, args=[product.id]))
+        else:
+            messages.error(request, "Error Adding Operational Details! Please Try Again")
+    else:
+        form = OperationsForm()
+
+    return render(request, 'products/operations_form.html', {
+        'context': 'add',
+        'product': product,
+        'form': form
+    })
+
+
         'context': 'edit',
         'product': product,
         'form': form
