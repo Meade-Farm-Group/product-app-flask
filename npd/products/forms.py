@@ -28,18 +28,17 @@ class CommercialForm(forms.ModelForm):
         }
 
 
-class PackagingForm(forms.ModelForm):
-    """ Packaging Form """
+class OperationsForm(forms.ModelForm):
+    """ Operations Form """
     class Meta:
-        model = PackagingModel
+        model = OperationsModel
         exclude = [
             'product',
             'created_on',
             'created_by',
         ]
         widgets = {
-            'date_ordered': DateInput(),
-            'delivery_date': DateInput(),
+            'test_date': DateInput(),
         }
 
 

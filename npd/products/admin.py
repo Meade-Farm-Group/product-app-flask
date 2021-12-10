@@ -24,14 +24,6 @@ class CommercialAdmin(admin.ModelAdmin):
     )
 
 
-class PackagingAdmin(admin.ModelAdmin):
-    list_display = (
-        'product',
-        'created_on',
-        'created_by',
-    )
-
-
 class OperationsAdmin(admin.ModelAdmin):
     list_display = (
         'product',

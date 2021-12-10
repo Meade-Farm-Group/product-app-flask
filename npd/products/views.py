@@ -126,56 +126,6 @@ def edit_commercial_details(request, product_id):
 
 
 @login_required
-def add_packaging_details(request, product_id):
-    product = get_object_or_404(Product, pk=product_id)
-    # Check if theres already packaging details submitted, don't want to submit twice
-    if len(PackagingModel.objects.filter(product=product_id)) > 0:
-        messages.error(request, f"Packaging Details Already Submitted For {product.product_name}")
-        return redirect(reverse(product_details, args=[product.id]))
-    if request.method == 'POST':
-        form = PackagingForm(request.POST)
-        if form.is_valid():
-            packaging_details = form.save(commit=False)
-            packaging_details.product = product
-            packaging_details.created_by = request.user
-            packaging_details.save()
-            form.save_m2m()
-            messages.success(request, "Packaging Details Successfully Added!")
-            return redirect(reverse(product_details, args=[product.id]))
-        else:
-            messages.error(request, "Error Adding Packaging Details! Please Try Again")
-    else:
-        form = PackagingForm()
-
-    return render(request, 'products/packaging_form.html', {
-        'context': 'add',
-        'product': product,
-        'form': form
-    })
-
-
-@login_required
-def edit_packaging_details(request, product_id):
-    product = get_object_or_404(Product, pk=product_id)
-    packaging_details = get_object_or_404(PackagingModel, product=product_id)
-
-    if request.method == 'POST':
-        form = PackagingForm(request.POST, instance=packaging_details)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Packaging Details Successfully Updated!")
-            return redirect(reverse(product_details, args=[product.id]))
-    else:
-        form = PackagingForm(instance=packaging_details)
-
-    return render(request, 'products/packaging_form.html', {
-        'context': 'edit',
-        'product': product,
-        'form': form
-    })
-
-
-@login_required
 def add_operations_details(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     if len(OperationsModel.objects.filter(product=product_id)) > 0:
