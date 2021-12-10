@@ -266,7 +266,28 @@ def add_finished_specification(request, product_id):
     })
 
 
+@login_required
+def edit_finished_specification(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    finished_spec = get_object_or_404(FinishedProduct, product=product_id)
+
+    if request.method == 'POST':
+        form = FinishedProductForm(request.POST, instance=finished_spec)
+        if form.is_valid():
+            finished_spec = form.save()
+            messages.success(request, "Finished Product Specification Successfully Updated!")
+            return redirect(reverse(product_details, args=[product.id]))
+        else:
+            messages.error(request, "Error Updating Finished Product Specification! Please Try Again")
+    else:
+        form = FinishedProductForm(instance=finished_spec)
+    
+    return render(request, 'products/finished_product_form.html', {
         'context': 'edit',
         'product': product,
+        'form': form,
+    })
+
+
         'form': form
     })
