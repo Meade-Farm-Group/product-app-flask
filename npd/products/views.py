@@ -289,5 +289,29 @@ def edit_finished_specification(request, product_id):
     })
 
 
+@login_required
+def add_defect_specification(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+
+    if request.method == 'POST':
+        form = DefectSpecificationForm(request.POST)
+        if form.is_valid():
+            defect_spec = form.save(commit=False)
+            defect_spec.product = product
+            defect_spec.save()
+            messages.success(request, "Defect Specification Successfully Added!")
+            return redirect(reverse(product_details, args=[product.id]))
+        else:
+            messages.error(request, "Error Adding Defect Specification! Please Try Again")
+    else:
+        form = DefectSpecificationForm()
+
+    return render(request, 'products/defect_specification_form.html', {
+        'context': 'add',
+        'product': product,
+        'form': form,
+    })
+
+
         'form': form
     })
