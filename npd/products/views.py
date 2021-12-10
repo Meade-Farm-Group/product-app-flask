@@ -226,6 +226,17 @@ def edit_operations_details(request, product_id):
     })
 
 
+@login_required
+def technical_navigation(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    finished_spec = FinishedProduct.objects.filter(product=product_id).first()
+
+    return render(request, 'products/technical_navigation.html', {
+        'product': product,
+        'finished_spec': finished_spec,
+    })
+
+
         'context': 'edit',
         'product': product,
         'form': form
