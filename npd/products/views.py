@@ -352,3 +352,18 @@ def product_defects(request, product_id):
     })
 
 
+@login_required
+def delete_defect_specification(request, product_id, defect_spec_id):
+    product = get_object_or_404(Product, pk=product_id)
+    defect_spec = get_object_or_404(DefectSpecification, pk=defect_spec_id)
+
+    if request.method == 'POST':
+        defect_spec.delete()
+        messages.warning(request, "Defect Specification Successfully Deleted!")
+        return redirect(reverse(product_details, args=[product.id]))
+
+    return render(request, 'products/confirm_delete.html', {
+        'delete': 'Defect Specification',
+        'action': reverse(delete_defect_specification, args=[product.id, defect_spec.id]),
+        'cancel': reverse(product_details, args=[product.id]),
+    })
