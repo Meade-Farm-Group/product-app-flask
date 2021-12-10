@@ -203,6 +203,29 @@ def add_operations_details(request, product_id):
     })
 
 
+@login_required
+def edit_operations_details(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    operations_details = get_object_or_404(OperationsModel, product=product_id)
+
+    if request.method == 'POST':
+        form = OperationsForm(request.POST, instance=operations_details)
+        if form.is_valid():
+            operations_details = form.save()
+            messages.success(request, "Opeartions Details Successfully Updated!")
+            return redirect(reverse(product_details, args=[product.id]))
+        else:
+            messages.error(request, "Error Updating Operational Details! Please Try Again")
+    else:
+        form = OperationsForm(instance=operations_details)
+
+    return render(request, 'products/operations_form.html', {
+        'context': 'edit',
+        'product': product,
+        'form': form
+    })
+
+
         'context': 'edit',
         'product': product,
         'form': form
