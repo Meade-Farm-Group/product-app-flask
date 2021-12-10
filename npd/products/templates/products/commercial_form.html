@@ -5,44 +5,16 @@
 {% block content %}
 <div class="container">
     <div class="card">
-        <form action="{% url 'add_commercial_details' product.id %}" method="post">
+        <form action="{% if context == 'add' %}{% url 'add_commercial_details' product.id %}{% else %}{% url 'edit_commercial_details' product.id %}{% endif %}" method="post">
             <div class="card-header">
-                <h3>Add Commercial Details</h3>
+                <h3>
+                    <i class="fas fa-handshake"></i>
+                    {% if context == 'add' %}Add{% else %}Edit{% endif %} Commercial Details
+                </h3>
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-6">
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">
-                                <strong>Product Name:</strong>
-                                <span class="float-end">{{ product.product_name }}</span>
-                            </li>
-                            <li class="list-group-item">
-                                <strong>Department:</strong>
-                                <span class="float-end">{{ product.department }}</span>
-                            </li>
-                            <li class="list-group-item">
-                                <strong>Customer:</strong>
-                                <span class="float-end">{{ product.customer }}</span>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="col-6">
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">
-                                <strong>Status:</strong>
-                                <span class="float-end">{{ product.status }}</span>
-                            </li>
-                            <li class="list-group-item">
-                                <strong>Created On:</strong>
-                                <span class="float-end">{{ product.created_on }}</span>
-                            </li>
-                            <li class="list-group-item">
-                                <strong>Created By:</strong>
-                                <span class="float-end">{{ product.created_by }}</span>
-                            </li>
-                        </ul>
-                    </div>
+                    {% include "products/includes/product_header.html" %}
                     <hr>
                     {% csrf_token %}
                     {% for field in form %}
