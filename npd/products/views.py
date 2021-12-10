@@ -77,6 +77,9 @@ def edit_navigation(request, product_id):
 @login_required
 def add_commercial_details(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
+    if len(CommercialModel.objects.filter(product=product_id)) > 0:
+        messages.error(request, f"Commercial Details Already Submitted For {product.product_name}")
+        return redirect(reverse(product_details, args=[product.id]))
     if request.method == 'POST':
         form = CommercialForm(request.POST)
         if form.is_valid():
