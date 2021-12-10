@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h2 class="text-center">Edit Technical Details For Product: {{ product.product_name }}</h2>
+    <hr>
+    <div class="row">
+        <div class="col-12 d-flex justify-content-center mb-2">
+            {% if finished_spec is None %}
+                <a href="{% url 'add_finished_specification' product.id %}" class="btn btn-lg btn-primary">
+                    Add Finished Product Specification
+                </a>
+            {% else %}
+                <a href="{% url 'edit_finished_specification' product.id %}" class="btn btn-lg btn-warning">
+                    Edit Finished Product Specification
+                </a>
+            {% endif %}
+        </div>
+        <div class="col-12 d-flex justify-content-center mb-2">
+            <a href="{% url 'product_defects' product.id %}" class="btn btn-lg btn-primary">
+                View Defect Specifications
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
