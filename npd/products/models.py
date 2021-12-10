@@ -140,4 +140,12 @@ class DefectSpecification(models.Model):
 class ProphetModel(models.Model):
     product = models.OneToOneField(Product, on_delete=models.CASCADE)
     product_created = models.BooleanField()
-    bom_created = models.Boolean
+    bom_created = models.BooleanField()
+    packaging_added = models.BooleanField()
+    created_on = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+
+    def __str__(self):
+        return f'{self.product} Prophet Model'
+
+

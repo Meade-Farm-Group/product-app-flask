@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.contrib.auth.decorators import login_required
-from .models import CommercialModel, DefectSpecification, FinishedProduct, OperationsModel, PackagingModel, Product, ProductStatus
-from .forms import CommercialForm, DefectSpecificationForm, FinishedProductForm, OperationsForm, PackagingForm, ProductForm
+from .models import CommercialModel, DefectSpecification, FinishedProduct, InnerPackaging, OperationsModel, Palletisation, Product, ProductStatus, ProphetModel
+from .forms import CommercialForm, DefectSpecificationForm, FinishedProductForm, InnerPackagingForm, OperationsForm, PalletisationForm, ProductForm, ProphetForm
 from django.contrib import messages
 
 
@@ -22,15 +22,12 @@ def product_details(request, product_id):
     exclude_fields = ["id", "product"]
     # we want the commercial_details variable to return none if they haven't been added
     commercial_details = CommercialModel.objects.filter(product=product_id).first()
-    packaging_details = PackagingModel.objects.filter(product=product_id).first()
     operations_details = OperationsModel.objects.filter(product=product_id).first()
 
     return render(request, 'products/product_details.html', {
         'product': product,
         'commercial_details': commercial_details,
         'commercial_details_keys': CommercialModel._meta.get_fields(),
-        'packaging_details': packaging_details,
-        'packaging_details_keys': PackagingModel._meta.get_fields(),
         'operations_details': operations_details,
         'operations_details_keys': OperationsModel._meta.get_fields(),
         'exclude_fields': exclude_fields
@@ -62,15 +59,14 @@ def create_product(request):
 def edit_navigation(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     commercial_details = CommercialModel.objects.filter(product=product_id).first()
-    packaging_details = PackagingModel.objects.filter(product=product_id).first()
     operations_details = OperationsModel.objects.filter(product=product_id).first()
-    # TODO technical details 
+    prophet_details = ProphetModel.objects.filter(product=product_id).first()
 
     return render(request, 'products/edit_navigation.html', {
         'product': product,
         'commercial_details': commercial_details,
-        'packaging_details': packaging_details,
         'operations_details': operations_details,
+        'prophet_details': prophet_details,
     })
 
 
@@ -317,3 +313,55 @@ def delete_defect_specification(request, product_id, defect_spec_id):
         'action': reverse(delete_defect_specification, args=[product.id, defect_spec.id]),
         'cancel': reverse(product_details, args=[product.id]),
     })
+
+
+@login_required
+def add_prophet_details(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    if len(ProphetModel.objects.filter(product=product_id)) > 0:
+        messages.error(request, f"Prophet Details Already Submitted For {product.product_name}")
+        return redirect(reverse(product_details, args=[product.id]))
+    if request.method == 'POST':
+        form = ProphetForm(request.POST)
+        if form.is_valid():
+            prophet_details = form.save(commit=False)
+            prophet_details.product = product
+            prophet_details.created_by = request.user
+            prophet_details.save()
+            messages.success(request, "Prophet Details Successfully Added!")
+            return redirect(reverse(product_details, args=[product.id]))
+        else:
+            messages.error(request, "Error Adding Prophet Details! Please Try Again")
+    else:
+        form = ProphetForm()
+    
+    return render(request, 'products/prophet_form.html', {
+        'context': 'add',
+        'product': product,
+        'form': form
+    })
+
+
+@login_required
+def edit_prophet_details(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    prophet_details = get_object_or_404(ProphetModel, product=product_id)
+
+    if request.method == 'POST':
+        form = ProphetForm(request.POST, instance=prophet_details)
+        if form.is_valid():
+            prophet_details = form.save()
+            messages.success(request, "Prophet Details Successfully Updated!")
+            return redirect(reverse(product_details, args=[product.id]))
+        else:
+            messages.error(request, "Error Updating Prophet Details! Please Try Again")
+    else:
+        form = ProphetForm(instance=prophet_details)
+
+    return render(request, 'products/prophet_form.html', {
+        'context': 'edit',
+        'product': product,
+        'form': form
+    })
+
+

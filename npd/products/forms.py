@@ -42,8 +42,19 @@ class OperationsForm(forms.ModelForm):
         }
 
 
-class OperationsForm(forms.ModelForm):
-    """ Operations Form """
+
+
+class ProphetForm(forms.ModelForm):
+    """ Prophet Form """
+    class Meta:
+        model = ProphetModel
+        exclude = [
+            'product',
+            'created_on',
+            'created_by',
+        ]
+
+
     class Meta:
         model = OperationsModel
         exclude = [

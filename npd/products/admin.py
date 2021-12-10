@@ -53,6 +53,17 @@ class DefectSpecificationAdmin(admin.ModelAdmin):
     )
 
 
+class ProphetModelAdmin(admin.ModelAdmin):
+    list_display = (
+        'product',
+        'product_created',
+        'bom_created',
+        'packaging_added',
+        'created_on',
+        'created_by',
+    )
+
+
 admin.site.register(Product, ProductAdmin)
 admin.site.register(ProductStatus)
 admin.site.register(Variety)
