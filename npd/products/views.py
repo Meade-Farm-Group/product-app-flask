@@ -237,6 +237,35 @@ def technical_navigation(request, product_id):
     })
 
 
+@login_required
+def add_finished_specification(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+
+    if len(FinishedProduct.objects.filter(product=product_id)) > 0:
+        messages.error(request, f"Finished Product Specification Already Submitted For {product.product_name}")
+        return redirect(reverse(product_details, args=[product.id]))
+
+    if request.method == 'POST':
+        form = FinishedProductForm(request.POST)
+        if form.is_valid():
+            commercial_details = form.save(commit=False)
+            commercial_details.product = product
+            commercial_details.created_by = request.user
+            commercial_details.save()
+            messages.success(request, "Finished Product Specification Successfully Added!")
+            return redirect(reverse(product_details, args=[product.id]))
+        else:
+            messages.error(request, "Error Adding Finished Product Specification! Please Try Again")
+    else:
+        form = FinishedProductForm()
+
+    return render(request, 'products/finished_product_form.html', {
+        'context': 'add',
+        'product': product,
+        'form': form,
+    })
+
+
         'context': 'edit',
         'product': product,
         'form': form
