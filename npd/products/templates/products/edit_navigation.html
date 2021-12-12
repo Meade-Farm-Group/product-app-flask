@@ -16,35 +16,36 @@
             {% endif %}
         </div>
         <div class="col-12 d-flex justify-content-center mb-2">
-            {% if packaging_details is None %}
-                <a href="{% url 'add_packaging_details' product.id %}" class="btn btn-lg btn-primary">
-                    <i class="fas fa-boxes"></i> Add Packaging Details
-                </a>
+            {% if operations_details is None %}
+            <a href="{% url 'add_operations_details' product.id %}" class="btn btn-lg btn-primary">
+                <i class="fas fa-cogs"></i> Add Operations Details
+            </a>
             {% else %}
-                <a href="{% url 'edit_packaging_details' product.id %}" class="btn btn-lg btn-warning">
-                    <i class="fas fa-boxes"></i> Edit Packaging Details
-                </a>
+            <a href="{% url 'edit_operations_details' product.id %}" class="btn btn-lg btn-warning">
+                <i class="fas fa-cogs"></i> Edit Operations Details
+            </a>
             {% endif %}
         </div>
         <div class="col-12 d-flex justify-content-center mb-2">
-            {% if operations_details is None %}
-                <a href="{% url 'add_operations_details' product.id %}" class="btn btn-lg btn-primary">
-                    <i class="fas fa-cogs"></i> Add Operations Details
+            {% if prophet_details is None %}
+                <a href="{% url 'add_prophet_details' product.id %}" class="btn btn-lg btn-primary">
+                    <i class="fas fa-database"></i> Add Prophet Details
                 </a>
             {% else %}
-                <a href="{% url 'edit_operations_details' product.id %}" class="btn btn-lg btn-warning">
-                    <i class="fas fa-cogs"></i> Edit Operations Details
+                <a href="{% url 'edit_prophet_details' product.id %}" class="btn btn-lg btn-warning">
+                    <i class="fas fa-database"></i> Edit Prophet Details
                 </a>
             {% endif %}
         </div>
+        <hr>
         <div class="col-12 d-flex justify-content-center mb-2">
             <a href="{% url 'technical_navigation' product.id %}" class="btn btn-lg btn-primary">
                 <i class="fas fa-eye"></i> Add Technical Details
             </a>
         </div>
         <div class="col-12 d-flex justify-content-center mb-2">
-            <a href="#" class="btn btn-lg btn-primary">
-                <i class="fas fa-database"></i> Add Prophet Details
+            <a href="{% url 'packaging_navigation' product.id %}" class="btn btn-lg btn-primary">
+                <i class="fas fa-boxes"></i> Add Packaging Details
             </a>
         </div>
     </div>
