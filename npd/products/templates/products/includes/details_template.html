@@ -10,11 +10,11 @@
                         {% if value|get_type == "list" %}
                             <span class="float-end">{{ value.all|join:", " }}</span>
                         {% else %}
-                            {% if value == "True" %}
+                            {% if value is True %}
                                 <span class="float-end">
                                     <i class="fas fa-check text-success"></i>
                                 </span>
-                            {% elif value == "False" %}
+                            {% elif value is False %}
                                 <span class="float-end">
                                     <i class="fas fa-times text-danger"></i>
                                 </span>
@@ -41,7 +41,7 @@
     
     {% else %}
         <h4 class="text-center">
-            <i class="fas fa-exclamation-circle"></i> No Commercial Details Available!
+            <i class="fas fa-exclamation-circle"></i> No Details Available!
         </h4>
     {% endif %}
 
