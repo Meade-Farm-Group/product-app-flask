@@ -481,9 +481,9 @@ def add_inner_packaging(request, product_id):
 
 
 @login_required
-def edit_inner_packaging(request, product_id):
+def edit_inner_packaging(request, product_id, inner_pack_id):
     product = get_object_or_404(Product, pk=product_id)
-    inner_packaging = get_object_or_404(InnerPackaging, product=product_id)
+    inner_packaging = get_object_or_404(InnerPackaging, pk=inner_pack_id)
 
     if request.method == 'POST':
         form = InnerPackagingForm(request.POST, instance=inner_packaging)
@@ -499,5 +499,6 @@ def edit_inner_packaging(request, product_id):
     return render(request, 'products/inner_packaging_form.html', {
         'context': 'edit',
         'product': product,
+        'inner_packaging': inner_packaging,
         'form': form
     })
