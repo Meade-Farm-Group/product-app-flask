@@ -538,3 +538,27 @@ def add_outer_packaging(request, product_id):
     })
 
 
+@login_required
+def edit_outer_packaging(request, product_id, outer_pack_id):
+    product = get_object_or_404(Product, pk=product_id)
+    outer_packaging = get_object_or_404(OuterPackaging, pk=outer_pack_id)
+
+    if request.method == 'POST':
+        form = OuterPackagingForm(request.POST, instance=outer_packaging)
+        if form.is_valid():
+            outer_packaging = form.save()
+            messages.success(request, "Outer Packaging Details Successfully Updated")
+            return redirect(reverse(product_details, args=[product.id]))
+        else:
+            messages.error(request, "Error Updating Outer Packaging Details! Please Try Again")
+    else:
+        form = OuterPackagingForm(instance=outer_packaging)
+
+    return render(request, 'products/outer_packaging_form.html', {
+        'context': 'edit',
+        'product': product,
+        'outer_packaging': outer_packaging,
+        'form': form
+    })
+
+
