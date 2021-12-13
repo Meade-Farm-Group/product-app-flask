@@ -25,4 +25,9 @@ urlpatterns = [
     path('<int:product_id>/packaging/inner_packaging/view', views.inner_packaging_table, name='inner_packaging_table'),
     path('<int:product_id>/packaging/inner_packaging/', views.add_inner_packaging, name='add_inner_packaging'),
     path('<int:product_id>/packaging/inner_packaging/<int:inner_pack_id>/edit', views.edit_inner_packaging, name='edit_inner_packaging'),
+    path('<int:product_id>/packaging/inner_packaging/<int:inner_pack_id>/delete', views.delete_inner_packaging, name='delete_inner_packaging'),
+    path('<int:product_id>/packaging/outer_packaging/view', views.outer_packaging_table, name='outer_packaging_table'),
+    path('<int:product_id>/packaging/outer_packaging/', views.add_outer_packaging, name='add_outer_packaging'),
+    path('<int:product_id>/packaging/outer_packaging/<int:outer_pack_id>/edit', views.edit_outer_packaging, name='edit_outer_packaging'),
+    path('<int:product_id>/packaging/outer_packaging/<int:outer_pack_id>/delete', views.delete_outer_packaging, name='delete_outer_packaging'),
 ]
