@@ -9,7 +9,7 @@
             </h2>
         </div>
         <div class="col-2">
-            <a href="#" class="btn btn-lg btn-success">
+            <a href="{% url 'add_inner_packaging' product.id %}" class="btn btn-lg btn-success">
                 <i class="fas fa-plus"></i>
                 Add
             </a>
@@ -34,12 +34,19 @@
                         <tr>
                             <td>{{ pack.id }}</td>
                             <th>{{ pack.branding }}</th>
-                            <td>{{ pack.supplier }} %</td>
+                            <td>{{ pack.supplier }}</td>
+                            <td class="text-center">
+                                {% if pack.artwork_provided == True %}
+                                    <i class="fas fa-check text-success"></i>
+                                {% else %}
+                                    <i class="fas fa-times text-danger"></i>
+                                {% endif %}
+                            </td>
                             <td>{{ pack.packaging_type }}</td>
                             <td>
                                 <div class="btn-group">
-                                    <a href="#" class="btn btn-warning">Edit</a>
-                                    <a href="#" class="btn btn-danger">Delete</a>
+                                    <a href="{% url 'edit_inner_packaging' product.id pack.id %}" class="btn btn-warning">Edit</a>
+                                    <a href="{% url 'delete_inner_packaging' product.id pack.id %}" class="btn btn-danger">Delete</a>
                                 </div>
                             </td>
                         </tr>
