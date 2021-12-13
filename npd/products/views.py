@@ -502,3 +502,16 @@ def edit_inner_packaging(request, product_id, inner_pack_id):
         'inner_packaging': inner_packaging,
         'form': form
     })
+
+
+@login_required
+def outer_packaging_table(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    outer_packaging = OuterPackaging.objects.filter(product=product)
+
+    return render(request, 'products/outer_packaging_table.html', {
+        'product': product,
+        'outer_packaging': outer_packaging,
+    })
+
+
