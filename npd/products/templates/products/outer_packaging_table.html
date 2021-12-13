@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-10">
+            <h2 class="text-center">
+                Outer Packaging List: {{ product.product_name }}
+            </h2>
+        </div>
+        <div class="col-2">
+            <a href="{% url 'add_outer_packaging' product.id %}" class="btn btn-lg btn-success">
+                <i class="fas fa-plus"></i>
+                Add
+            </a>
+        </div>
+    </div>
+    <hr>
+    {% if outer_packaging.count > 0 %}
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Units Per Case</th>
+                        <th>Material Type</th>
+                        <th>Supplier</th>
+                        <th>Outer Case Label</th>
+                        <th>Outer Case Card</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pack in outer_packaging %}
+                        <tr>
+                            <td>{{ pack.id }}</td>
+                            <td>{{ pack.units_per_case }}</td>
+                            <td>{{ pack.material_type }}</td>
+                            <td>{{ pack.supplier }}</td>
+                            <td class="text-center">
+                                {% if pack.outer_case_label == True %}
+                                    <i class="fas fa-check text-success"></i>
+                                {% else %}
+                                    <i class="fas fa-times text-danger"></i>
+                                {% endif %}
+                            </td>
+                            <td class="text-center">
+                                {% if pack.outer_case_card == True %}
+                                    <i class="fas fa-check text-success"></i>
+                                {% else %}
+                                    <i class="fas fa-times text-danger"></i>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    <a href="{% url 'edit_outer_packaging' product.id pack.id %}" class="btn btn-warning">Edit</a>
+                                    <a href="{% url 'delete_outer_packaging' product.id pack.id %}" class="btn btn-danger">Delete</a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <h4 class="text-center">
+            <i class="fas fa-times"></i> No Outer Packaging To Show!
+        </h4>
+    {% endif %}
+</div>
+{% endblock %}
