@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.contrib.auth.decorators import login_required
-from .models import CommercialModel, DefectSpecification, FinishedProduct, InnerPackaging, OperationsModel, Palletisation, Product, ProductStatus, ProphetModel
-from .forms import CommercialForm, DefectSpecificationForm, FinishedProductForm, InnerPackagingForm, OperationsForm, PalletisationForm, ProductForm, ProphetForm
+from .models import CommercialModel, DefectSpecification, FinishedProduct, InnerPackaging, OperationsModel, OuterPackaging, Palletisation, Product, ProductStatus, ProphetModel
+from .forms import CommercialForm, DefectSpecificationForm, FinishedProductForm, InnerPackagingForm, OperationsForm, OuterPackagingForm, PalletisationForm, ProductForm, ProphetForm
 from django.contrib import messages
 
 
@@ -23,6 +23,12 @@ def product_details(request, product_id):
     # we want the commercial_details variable to return none if they haven't been added
     commercial_details = CommercialModel.objects.filter(product=product_id).first()
     operations_details = OperationsModel.objects.filter(product=product_id).first()
+    inner_packaging = InnerPackaging.objects.filter(product=product_id)
+    outer_packaging = OuterPackaging.objects.filter(product=product_id)
+    palletisation = Palletisation.objects.filter(product=product_id).first()
+    finished_product = FinishedProduct.objects.filter(product=product_id).first()
+    defect_specs = DefectSpecification.objects.filter(product=product_id)
+    prophet_details = ProphetModel.objects.filter(product=product_id).first()
 
     return render(request, 'products/product_details.html', {
         'product': product,
@@ -30,6 +36,18 @@ def product_details(request, product_id):
         'commercial_details_keys': CommercialModel._meta.get_fields(),
         'operations_details': operations_details,
         'operations_details_keys': OperationsModel._meta.get_fields(),
+        'inner_packaging': inner_packaging,
+        'inner_packaging_keys': InnerPackaging._meta.get_fields(),
+        'outer_packaging': outer_packaging,
+        'outer_packaging_keys': OuterPackaging._meta.get_fields(),
+        'palletisation': palletisation,
+        'palletisation_keys': Palletisation._meta.get_fields(),
+        'finished_product': finished_product,
+        'finished_product_keys': FinishedProduct._meta.get_fields(),
+        'defect_specs': defect_specs,
+        'defect_spec_keys': DefectSpecification._meta.get_fields(),
+        'prophet_details': prophet_details,
+        'prophet_details_keys': ProphetModel._meta.get_fields(),
         'exclude_fields': exclude_fields
     })
 
