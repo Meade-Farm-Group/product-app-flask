@@ -562,3 +562,35 @@ def edit_outer_packaging(request, product_id, outer_pack_id):
     })
 
 
+@login_required
+def delete_outer_packaging(request, product_id, outer_pack_id):
+    product = get_object_or_404(Product, pk=product_id)
+    outer_packaging = get_object_or_404(OuterPackaging, pk=outer_pack_id)
+
+    if request.method == 'POST':
+        outer_packaging.delete()
+        messages.warning(request, "Outer Packaging Successfully Deleted!")
+        return redirect(reverse(product_details, args=[product.id]))
+
+    return render(request, 'products/confirm_delete.html', {
+        'delete': 'Outer Packaging',
+        'action': reverse(delete_outer_packaging, args=[product.id, outer_packaging.id]),
+        'cancel': reverse(product_details, args=[product.id]),
+    })
+
+
+@login_required
+def delete_inner_packaging(request, product_id, inner_pack_id):
+    product = get_object_or_404(Product, pk=product_id)
+    inner_packaging = get_object_or_404(InnerPackaging, pk=inner_pack_id)
+
+    if request.method == 'POST':
+        inner_packaging.delete()
+        messages.warning(request, "Inner Packaging Successfully Deleted!")
+        return redirect(reverse(product_details, args=[product.id]))
+
+    return render(request, 'products/confirm_delete.html', {
+        'delete': 'Outer Packaging',
+        'action': reverse(delete_inner_packaging, args=[product.id, inner_packaging.id]),
+        'cancel': reverse(product_details, args=[product.id]),
+    })
