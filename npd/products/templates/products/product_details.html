@@ -2,9 +2,9 @@
 {% load lookup %}
 {% block content %}
 <div class="container">
-    <h2 class="text-center">
-        Product Details
-    </h2>
+    <h1 class="text-center">
+        <i class="fas fa-leaf"></i> Product Details
+    </h1>
     <hr>
     <div class="card">
         <div class="card-body">
@@ -27,15 +27,98 @@
         </div>
     </div>
     <hr>
-    <h2>Commercial Details</h2>
+    <h2 class="text-primary">
+        <i class="fas fa-handshake"></i> Commercial Details
+    </h2>
     <hr>
     {% include "products/includes/details_template.html" with details=commercial_details keys=commercial_details_keys %}
     <hr>
-    <h2>Packaging Details</h2>
+    <h2 class="text-primary">
+        <i class="fas fa-boxes"></i> Packaging Details
+    </h2>
     <hr>
+    <h4 class="text-info"><i>Inner Packaging</i></h4>
+    {% if inner_packaging.count > 0 %}
+        {% for pack in inner_packaging %}
+            <hr>
+            <h6 class="text-success"><i>{{ forloop.counter }} of {{ inner_packaging.count }}</i></h6>
+            <hr>
+            {% include "products/includes/details_template.html" with details=pack keys=inner_packaging_keys %}
+        {% endfor %}
+    {% else %}
+        <h4 class="text-center">
+            <i class="fas fa-exclamation-circle"></i> No Details Available!
+        </h4>
+    {% endif %}
     <hr>
-    <h2>Operations Details</h2>
+    <h4 class="text-info"><i>Outer Packaging</i></h4>
+    {% if outer_packaging.count > 0 %}
+        {% for pack in outer_packaging %}
+            <hr>
+            <h6 class="text-success"><i>{{ forloop.counter }} of {{ outer_packaging.count }}</i></h6>
+            <hr>
+            {% include "products/includes/details_template.html" with details=pack keys=outer_packaging_keys %}
+        {% endfor %}
+    {% else %}
+        <h4 class="text-center">
+            <i class="fas fa-exclamation-circle"></i> No Details Available!
+        </h4>
+    {% endif %}
+    <hr>
+    <h4 class="text-info"><i>Palletisation</i></h4>
+    <hr>
+    {% include "products/includes/details_template.html" with details=palletisation keys=palletisation_keys %}
+    <hr>
+    <h2 class="text-primary">
+        <i class="fas fa-cogs"></i> Operations Details
+    </h2>
     <hr>
     {% include "products/includes/details_template.html" with details=operations_details keys=operations_details_keys %}
+    <hr>
+    <h2 class="text-primary">
+        <i class="fas fa-eye"></i> Technical Details
+    </h2>
+    <hr>
+    <h4 class="text-info"><i>Defect Specifications</i></h4>
+    <hr>
+    {% if defect_specs.count > 0 %}
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Defect</th>
+                        <th>Amber</th>
+                        <th>Red</th>
+                        <th>Comment</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for spec in defect_specs %}
+                        <tr>
+                            <th>{{ spec.defect }}</th>
+                            <td>{{ spec.amber }} %</td>
+                            <td>{{ spec.red }} %</td>
+                            <td>{{ spec.comment }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <h4 class="text-center">
+            <i class="fas fa-exclamation-circle"></i> No Defect Specs Available!
+        </h4>
+    {% endif %}
+    <hr>
+    <h4 class="text-info"><i>Finished Product</i></h4>
+    <hr>
+    {% include "products/includes/details_template.html" with details=finished_product keys=finished_product_keys %}
+    <hr>
+    <h2 class="text-primary">
+        <i class="fas fa-database"></i> Prophet Details
+    </h2>
+    <hr>
+    {% include "products/includes/details_template.html" with details=prophet_details keys=prophet_details_keys %}
+    <hr>
 </div>
 {% endblock %}
