@@ -515,3 +515,26 @@ def outer_packaging_table(request, product_id):
     })
 
 
+@login_required
+def add_outer_packaging(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+
+    if request.method == 'POST':
+        form = OuterPackagingForm(request.POST)
+        if form.is_valid():
+            outer_packaging = form.save(commit=False)
+            outer_packaging.product = product
+            outer_packaging.created_by = request.user
+            outer_packaging.save()
+            messages.success(request, "Inner Packaging Details Successfully Added!")
+            return redirect(reverse(product_details, args=[product.id]))
+    else:
+        form = OuterPackagingForm()
+
+    return render(request, 'products/outer_packaging_form.html', {
+        'context': 'add',
+        'product': product,
+        'form': form,
+    })
+
+
