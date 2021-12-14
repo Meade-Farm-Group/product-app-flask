@@ -1,5 +1,6 @@
+from django.contrib.auth.models import User
 from django.shortcuts import render, get_object_or_404, redirect, reverse
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from .models import CommercialModel, DefectSpecification, FinishedProduct, InnerPackaging, OperationsModel, OuterPackaging, Palletisation, Product, ProductStatus, ProphetModel
 from .forms import CommercialForm, DefectSpecificationForm, FinishedProductForm, InnerPackagingForm, OperationsForm, OuterPackagingForm, PalletisationForm, ProductForm, ProphetForm
 from django.contrib import messages
@@ -53,6 +54,7 @@ def product_details(request, product_id):
 
 
 @login_required
+@permission_required('products.add_product', raise_exception=True)
 def create_product(request):
     if request.method == 'POST':
         form = ProductForm(request.POST)
