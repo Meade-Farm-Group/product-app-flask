@@ -596,3 +596,19 @@ def delete_inner_packaging(request, product_id, inner_pack_id):
         'action': reverse(delete_inner_packaging, args=[product.id, inner_packaging.id]),
         'cancel': reverse(product_details, args=[product.id]),
     })
+
+
+@login_required
+def delete_product(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+
+    if request.method == 'POST':
+        product.delete()
+        messages.warning(request, "Product Successfully Deleted!")
+        return redirect(reverse(all_products))
+
+    return render(request, 'products/confirm_delete.html', {
+        'delete': 'Product',
+        'action': reverse(delete_product, args=[product.id]),
+        'cancel': reverse(product_details, args=[product.id])
+    })
