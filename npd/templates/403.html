@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h2 class="text-center">
+        <i class="fas fa-ban"></i> 403: Access Denied
+    </h2>
+    <hr>
+    <p class="text-center">
+        You don't have access to this resource, please check if any of the 
+        resources below are what you are looking for
+    </p>
+    <hr>
+    <div class="d-flex justify-content-center">
+        <div class="btn-group" role="group">
+            <a href="{% url 'upcoming_products' %}" class="btn btn-success">
+                <i class="fa fa-arrow-left" aria-hidden="true"></i> Upcoming Products
+            </a>
+            <a href="{% url 'product_home' %}" class="btn btn-success">
+                All Products <i class="fa fa-arrow-right" aria-hidden="true"></i>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
