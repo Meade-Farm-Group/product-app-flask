@@ -109,3 +109,12 @@ class PalletisationForm(forms.ModelForm):
             'created_on',
             'created_by',
         ]
+
+
+class SignOffForm(forms.Form):
+    signature_data = forms.CharField(widget=forms.TextInput(
+        attrs={
+            'class': 'd-none',
+            'id': 'signature-data',
+        }
+    ), label='')
