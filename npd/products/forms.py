@@ -1,5 +1,15 @@
 from django import forms
-from .models import DefectSpecification, FinishedProduct, InnerPackaging, OperationsModel, OuterPackaging, Palletisation, Product, CommercialModel, ProphetModel
+from .models import (
+    DefectSpecification,
+    FinishedProduct,
+    InnerPackaging,
+    OperationsModel,
+    OuterPackaging,
+    Palletisation,
+    Product,
+    CommercialModel,
+    ProphetModel
+)
 from ancillaries.forms import DateInput
 
 
