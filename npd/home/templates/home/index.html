@@ -9,9 +9,15 @@
                 The Meade Product App <i>(MPA)</i> is a bespoke internal system for new product development, 
                 designed to ensure full product specification information is gathered before the production starts.
             </p>
-            <a href="{% url 'account_login' %}" class="btn btn-success">
-                Login <i class="fas fa-check"></i>
-            </a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'product_home' %}" class="btn btn-success">
+                    Upcoming Products <i class="fa fa-eye" aria-hidden="true"></i>
+                </a>
+            {% else %}
+                <a href="{% url 'account_login' %}" class="btn btn-success">
+                    Login <i class="fas fa-check"></i>
+                </a>
+            {% endif %}
         </div>
     </div>
 {% endblock %}
