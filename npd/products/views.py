@@ -814,3 +814,29 @@ def signoff_product(request, product_id):
     })
 
 
+@login_required
+@permission_required('products.add_product', raise_exception=True)
+def reopen_product(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    if not product.is_ready():
+        messages.info(
+            request, "Product Is Not Completed!"
+        )
+        return redirect(reverse("product_details", args=[product.id]))
+
+    if request.method == "POST":
+        product.status = ProductStatus.objects.get(
+            status="Pending - Awaiting Final Confirmation")
+        product.save()
+        messages.success(
+            request, "Product Successfully Reopened!"
+        )
+        return redirect(reverse("product_details", args=[product.id]))
+
+    return render(request, 'products/confirm_reopen.html', {
+        'delete': 'Product',
+        'action': reverse(
+            reopen_product, args=[product.id]
+        ),
+        'cancel': reverse(product_details, args=[product.id])
+    })
