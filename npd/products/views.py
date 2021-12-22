@@ -45,15 +45,21 @@ def product_details(request, product_id):
 
     # fields we don't want displayed in the template
     exclude_fields = ["id", "product"]
-    # we want the commercial_details variable to return none if they haven't been added
-    commercial_details = CommercialModel.objects.filter(product=product_id).first()
-    operations_details = OperationsModel.objects.filter(product=product_id).first()
+    # we want the commercial_details variable to return none if they
+    # haven't been added
+    commercial_details = CommercialModel.objects.filter(
+        product=product_id).first()
+    operations_details = OperationsModel.objects.filter(
+        product=product_id).first()
     inner_packaging = InnerPackaging.objects.filter(product=product_id)
     outer_packaging = OuterPackaging.objects.filter(product=product_id)
-    palletisation = Palletisation.objects.filter(product=product_id).first()
-    finished_product = FinishedProduct.objects.filter(product=product_id).first()
+    palletisation = Palletisation.objects.filter(
+        product=product_id).first()
+    finished_product = FinishedProduct.objects.filter(
+        product=product_id).first()
     defect_specs = DefectSpecification.objects.filter(product=product_id)
-    prophet_details = ProphetModel.objects.filter(product=product_id).first()
+    prophet_details = ProphetModel.objects.filter(
+        product=product_id).first()
 
     return render(request, 'products/product_details.html', {
         'product': product,
@@ -77,6 +83,7 @@ def product_details(request, product_id):
     })
 
 
+# check if user is logged in and if they have the appropriate permission
 @login_required
 @permission_required('products.add_product', raise_exception=True)
 def create_product(request):
@@ -84,7 +91,8 @@ def create_product(request):
         form = ProductForm(request.POST)
         if form.is_valid():
             product = form.save(commit=False)
-            product.status = ProductStatus.objects.get(status='Pending - Awaiting Sign Off')
+            product.status = ProductStatus.objects.get(
+                status='Pending - Awaiting Sign Off')
             product.created_by = request.user
             product.save()
             messages.success(request, "Product Created Successfully!")
@@ -102,8 +110,10 @@ def create_product(request):
 @login_required
 def edit_navigation(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
-    commercial_details = CommercialModel.objects.filter(product=product_id).first()
-    operations_details = OperationsModel.objects.filter(product=product_id).first()
+    commercial_details = CommercialModel.objects.filter(
+        product=product_id).first()
+    operations_details = OperationsModel.objects.filter(
+        product=product_id).first()
     prophet_details = ProphetModel.objects.filter(product=product_id).first()
 
     return render(request, 'products/edit_navigation.html', {
@@ -117,8 +127,16 @@ def edit_navigation(request, product_id):
 @login_required
 def add_commercial_details(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
+
+    # the commercial/operations/prophet models have a one-to-one relationship
+    # with the product
+    # therefore we need to check if one instance of the model already exists
+    # and redirect if there is
     if len(CommercialModel.objects.filter(product=product_id)) > 0:
-        messages.error(request, f"Commercial Details Already Submitted For {product.product_name}")
+        messages.error(
+            request,
+            f"Commercial Details Already Submitted For {product.product_name}"
+        )
         return redirect(reverse(product_details, args=[product.id]))
     if request.method == 'POST':
         form = CommercialForm(request.POST)
@@ -131,10 +149,13 @@ def add_commercial_details(request, product_id):
             messages.success(request, "Commercial Details Successfully Added!")
             return redirect(reverse(product_details, args=[product.id]))
         else:
-            messages.error(request, "Error Adding Commercial Details! Please Try Again")
+            messages.error(
+                request,
+                "Error Adding Commercial Details! Please Try Again"
+            )
     else:
         form = CommercialForm()
-    
+
     return render(request, 'products/commercial_form.html', {
         'context': 'add',
         'product': product,
@@ -151,10 +172,14 @@ def edit_commercial_details(request, product_id):
         form = CommercialForm(request.POST, instance=commercial_details)
         if form.is_valid():
             commercial_details = form.save()
-            messages.success(request, "Commercial Details Successfully Updated!")
+            messages.success(
+                request,
+                "Commercial Details Successfully Updated!")
             return redirect(reverse(product_details, args=[product.id]))
         else:
-            messages.error(request, "Error Updating Commercial Details! Please Try Again")
+            messages.error(
+                request,
+                "Error Updating Commercial Details! Please Try Again")
     else:
         form = CommercialForm(instance=commercial_details)
 
@@ -169,7 +194,9 @@ def edit_commercial_details(request, product_id):
 def add_operations_details(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     if len(OperationsModel.objects.filter(product=product_id)) > 0:
-        messages.error(request, f"Operations Details Already Submitted For {product.product_name}")
+        messages.error(
+            request,
+            f"Operations Details Already Submitted For {product.product_name}")
         return redirect(reverse(product_details, args=[product.id]))
     if request.method == 'POST':
         form = OperationsForm(request.POST)
@@ -179,10 +206,14 @@ def add_operations_details(request, product_id):
             operations_details.created_by = request.user
             operations_details.save()
             form.save_m2m()
-            messages.success(request, "Operational Details Successfully Added!")
+            messages.success(
+                request,
+                "Operational Details Successfully Added!")
             return redirect(reverse(product_details, args=[product.id]))
         else:
-            messages.error(request, "Error Adding Operational Details! Please Try Again")
+            messages.error(
+                request,
+                "Error Adding Operational Details! Please Try Again")
     else:
         form = OperationsForm()
 
@@ -202,10 +233,13 @@ def edit_operations_details(request, product_id):
         form = OperationsForm(request.POST, instance=operations_details)
         if form.is_valid():
             operations_details = form.save()
-            messages.success(request, "Opeartions Details Successfully Updated!")
+            messages.success(
+                request, "Opeartions Details Successfully Updated!")
             return redirect(reverse(product_details, args=[product.id]))
         else:
-            messages.error(request, "Error Updating Operational Details! Please Try Again")
+            messages.error(
+                request,
+                "Error Updating Operational Details! Please Try Again")
     else:
         form = OperationsForm(instance=operations_details)
 
@@ -232,7 +266,11 @@ def add_finished_specification(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
 
     if len(FinishedProduct.objects.filter(product=product_id)) > 0:
-        messages.error(request, f"Finished Product Specification Already Submitted For {product.product_name}")
+        messages.error(
+            request,
+            f"""
+                Finished Product Specification Already
+                 Submitted For {product.product_name}""")
         return redirect(reverse(product_details, args=[product.id]))
 
     if request.method == 'POST':
@@ -242,10 +280,15 @@ def add_finished_specification(request, product_id):
             commercial_details.product = product
             commercial_details.created_by = request.user
             commercial_details.save()
-            messages.success(request, "Finished Product Specification Successfully Added!")
+            messages.success(
+                request, "Finished Product Specification Successfully Added!")
             return redirect(reverse(product_details, args=[product.id]))
         else:
-            messages.error(request, "Error Adding Finished Product Specification! Please Try Again")
+            messages.error(
+                request,
+                """
+                    Error Adding Finished Product
+                     Specification! Please Try Again""")
     else:
         form = FinishedProductForm()
 
@@ -265,13 +308,19 @@ def edit_finished_specification(request, product_id):
         form = FinishedProductForm(request.POST, instance=finished_spec)
         if form.is_valid():
             finished_spec = form.save()
-            messages.success(request, "Finished Product Specification Successfully Updated!")
+            messages.success(
+                request,
+                "Finished Product Specification Successfully Updated!")
             return redirect(reverse(product_details, args=[product.id]))
         else:
-            messages.error(request, "Error Updating Finished Product Specification! Please Try Again")
+            messages.error(
+                request,
+                """
+                    Error Updating Finished Product
+                     Specification! Please Try Again""")
     else:
         form = FinishedProductForm(instance=finished_spec)
-    
+
     return render(request, 'products/finished_product_form.html', {
         'context': 'edit',
         'product': product,
@@ -289,10 +338,12 @@ def add_defect_specification(request, product_id):
             defect_spec = form.save(commit=False)
             defect_spec.product = product
             defect_spec.save()
-            messages.success(request, "Defect Specification Successfully Added!")
+            messages.success(
+                request, "Defect Specification Successfully Added!")
             return redirect(reverse(product_details, args=[product.id]))
         else:
-            messages.error(request, "Error Adding Defect Specification! Please Try Again")
+            messages.error(
+                request, "Error Adding Defect Specification! Please Try Again")
     else:
         form = DefectSpecificationForm()
 
@@ -311,18 +362,21 @@ def edit_defect_specification(request, product_id, defect_spec_id):
     if defect_spec.product != product:
         messages.warning("Invalid Product/Spec! Please Try Again")
         return redirect(reverse(all_products))
-    
+
     if request.method == 'POST':
         form = DefectSpecificationForm(request.POST, instance=defect_spec)
         if form.is_valid():
             defect_spec = form.save()
-            messages.success(request, "Defect Specification Successfully Updated!")
+            messages.success(
+                request, "Defect Specification Successfully Updated!")
             return redirect(reverse(product_details, args=[product.id]))
         else:
-            messages.error(request, "Error Updating Defect Specification! Please Try Again")
+            messages.error(
+                request,
+                "Error Updating Defect Specification! Please Try Again")
     else:
         form = DefectSpecificationForm(instance=defect_spec)
-    
+
     return render(request, 'products/defect_specification_form.html', {
         'context': 'edit',
         'product': product,
@@ -354,7 +408,8 @@ def delete_defect_specification(request, product_id, defect_spec_id):
 
     return render(request, 'products/confirm_delete.html', {
         'delete': 'Defect Specification',
-        'action': reverse(delete_defect_specification, args=[product.id, defect_spec.id]),
+        'action': reverse(
+            delete_defect_specification, args=[product.id, defect_spec.id]),
         'cancel': reverse(product_details, args=[product.id]),
     })
 
@@ -363,7 +418,9 @@ def delete_defect_specification(request, product_id, defect_spec_id):
 def add_prophet_details(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     if len(ProphetModel.objects.filter(product=product_id)) > 0:
-        messages.error(request, f"Prophet Details Already Submitted For {product.product_name}")
+        messages.error(
+            request,
+            f"Prophet Details Already Submitted For {product.product_name}")
         return redirect(reverse(product_details, args=[product.id]))
     if request.method == 'POST':
         form = ProphetForm(request.POST)
@@ -375,10 +432,11 @@ def add_prophet_details(request, product_id):
             messages.success(request, "Prophet Details Successfully Added!")
             return redirect(reverse(product_details, args=[product.id]))
         else:
-            messages.error(request, "Error Adding Prophet Details! Please Try Again")
+            messages.error(
+                request, "Error Adding Prophet Details! Please Try Again")
     else:
         form = ProphetForm()
-    
+
     return render(request, 'products/prophet_form.html', {
         'context': 'add',
         'product': product,
@@ -398,7 +456,8 @@ def edit_prophet_details(request, product_id):
             messages.success(request, "Prophet Details Successfully Updated!")
             return redirect(reverse(product_details, args=[product.id]))
         else:
-            messages.error(request, "Error Updating Prophet Details! Please Try Again")
+            messages.error(
+                request, "Error Updating Prophet Details! Please Try Again")
     else:
         form = ProphetForm(instance=prophet_details)
 
@@ -424,7 +483,11 @@ def packaging_navigation(request, product_id):
 def add_palletisation_spec(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     if len(Palletisation.objects.filter(product=product_id)) > 0:
-        messages.error(request, f"Palletisation Details Already Submitted For {product.product_name}")
+        messages.error(
+            request,
+            f"""
+                Palletisation Details Already
+                 Submitted For {product.product_name}""")
         return redirect(reverse(product_details, args=[product.id]))
     if request.method == 'POST':
         form = PalletisationForm(request.POST)
@@ -433,13 +496,16 @@ def add_palletisation_spec(request, product_id):
             palletisation_details.product = product
             palletisation_details.created_by = request.user
             palletisation_details.save()
-            messages.success(request, "Palletisation Details Successfully Added!")
+            messages.success(
+                request, "Palletisation Details Successfully Added!")
             return redirect(reverse(product_details, args=[product.id]))
         else:
-            messages.error(request, "Error Adding Palletisation Details! Please Try Again")
+            messages.error(
+                request,
+                "Error Adding Palletisation Details! Please Try Again")
     else:
         form = PalletisationForm()
-    
+
     return render(request, 'products/palletisation_form.html', {
         'context': 'add',
         'product': product,
@@ -450,16 +516,20 @@ def add_palletisation_spec(request, product_id):
 @login_required
 def edit_palletisation_spec(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
-    palletisation_details = get_object_or_404(Palletisation, product=product_id)
+    palletisation_details = get_object_or_404(
+        Palletisation, product=product_id)
 
     if request.method == 'POST':
         form = PalletisationForm(request.POST, instance=palletisation_details)
         if form.is_valid():
             palletisation_details = form.save()
-            messages.success(request, "Palletisation Details Successfully Updated")
+            messages.success(
+                request, "Palletisation Details Successfully Updated")
             return redirect(reverse(product_details, args=[product.id]))
         else:
-            messages.error(request, "Error Updating Palletisation Details! Please Try Again")
+            messages.error(
+                request,
+                "Error Updating Palletisation Details! Please Try Again")
     else:
         form = PalletisationForm(instance=palletisation_details)
 
@@ -492,13 +562,16 @@ def add_inner_packaging(request, product_id):
             inner_packaging.product = product
             inner_packaging.created_by = request.user
             inner_packaging.save()
-            messages.success(request, "Inner Packaging Details Successfully Added!")
+            messages.success(
+                request, "Inner Packaging Details Successfully Added!")
             return redirect(reverse(product_details, args=[product.id]))
         else:
-            messages.error(request, "Error Adding Inner Packaging Details! Please Try Again")
+            messages.error(
+                request,
+                "Error Adding Inner Packaging Details! Please Try Again")
     else:
         form = InnerPackagingForm()
-    
+
     return render(request, 'products/inner_packaging_form.html', {
         'context': 'add',
         'product': product,
@@ -515,10 +588,14 @@ def edit_inner_packaging(request, product_id, inner_pack_id):
         form = InnerPackagingForm(request.POST, instance=inner_packaging)
         if form.is_valid():
             inner_packaging = form.save()
-            messages.success(request, "Inner Packaging Details Successfully Updated")
+            messages.success(
+                request,
+                "Inner Packaging Details Successfully Updated")
             return redirect(reverse(product_details, args=[product.id]))
         else:
-            messages.error(request, "Error Updating Inner Packaging Details! Please Try Again")
+            messages.error(
+                request,
+                "Error Updating Inner Packaging Details! Please Try Again")
     else:
         form = InnerPackagingForm(instance=inner_packaging)
 
@@ -552,7 +629,9 @@ def add_outer_packaging(request, product_id):
             outer_packaging.product = product
             outer_packaging.created_by = request.user
             outer_packaging.save()
-            messages.success(request, "Inner Packaging Details Successfully Added!")
+            messages.success(
+                request,
+                "Inner Packaging Details Successfully Added!")
             return redirect(reverse(product_details, args=[product.id]))
     else:
         form = OuterPackagingForm()
@@ -573,10 +652,14 @@ def edit_outer_packaging(request, product_id, outer_pack_id):
         form = OuterPackagingForm(request.POST, instance=outer_packaging)
         if form.is_valid():
             outer_packaging = form.save()
-            messages.success(request, "Outer Packaging Details Successfully Updated")
+            messages.success(
+                request,
+                "Outer Packaging Details Successfully Updated")
             return redirect(reverse(product_details, args=[product.id]))
         else:
-            messages.error(request, "Error Updating Outer Packaging Details! Please Try Again")
+            messages.error(
+                request,
+                "Error Updating Outer Packaging Details! Please Try Again")
     else:
         form = OuterPackagingForm(instance=outer_packaging)
 
@@ -600,7 +683,9 @@ def delete_outer_packaging(request, product_id, outer_pack_id):
 
     return render(request, 'products/confirm_delete.html', {
         'delete': 'Outer Packaging',
-        'action': reverse(delete_outer_packaging, args=[product.id, outer_packaging.id]),
+        'action': reverse(
+            delete_outer_packaging,
+            args=[product.id, outer_packaging.id]),
         'cancel': reverse(product_details, args=[product.id]),
     })
 
@@ -617,7 +702,9 @@ def delete_inner_packaging(request, product_id, inner_pack_id):
 
     return render(request, 'products/confirm_delete.html', {
         'delete': 'Outer Packaging',
-        'action': reverse(delete_inner_packaging, args=[product.id, inner_packaging.id]),
+        'action': reverse(
+            delete_inner_packaging,
+            args=[product.id, inner_packaging.id]),
         'cancel': reverse(product_details, args=[product.id]),
     })
 
