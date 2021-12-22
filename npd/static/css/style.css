@@ -3,3 +3,8 @@
     max-height: 400px;
     margin: auto;
 }
+
+#signature-pad {
+    border: 2px solid black;
+    width: 100%;
+}
