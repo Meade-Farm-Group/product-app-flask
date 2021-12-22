@@ -778,3 +778,39 @@ def delete_product(request, product_id):
         'action': reverse(delete_product, args=[product.id]),
         'cancel': reverse(product_details, args=[product.id])
     })
+
+
+@login_required
+@check_product_status
+@permission_required('products.add_product', raise_exception=True)
+def signoff_product(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    if not product.is_final_confirmation():
+        messages.warning(
+            request, "Product Not Ready To Be Signed Off!")
+        return redirect(reverse('product_details', args=[product.id]))
+
+    if request.method == 'POST':
+        form = SignOffForm(request.POST)
+        if form.is_valid():
+            signature_uri = form.cleaned_data['signature_data']
+            product.signature = signature_uri
+            product.status = ProductStatus.objects.get(
+                status="Completed - Production Ready")
+            product.save()
+            messages.success(
+                request, "Signature Submitted Successfully")
+            return redirect(reverse(product_details, args=[product.id]))
+        else:
+            messages.warning(
+                request, "Invalid Signature Form!"
+            )
+    else:
+        form = SignOffForm()
+
+    return render(request, 'products/signoff_form.html', {
+        'product': product,
+        'form': form,
+    })
+
+
