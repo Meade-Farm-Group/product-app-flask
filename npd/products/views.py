@@ -1,9 +1,13 @@
 from django.contrib.auth.models import User
 from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.contrib.auth.decorators import login_required, permission_required
-from .models import CommercialModel, DefectSpecification, FinishedProduct, InnerPackaging, OperationsModel, OuterPackaging, Palletisation, Product, ProductStatus, ProphetModel
-from .forms import CommercialForm, DefectSpecificationForm, FinishedProductForm, InnerPackagingForm, OperationsForm, OuterPackagingForm, PalletisationForm, ProductForm, ProphetForm
+from .models import *
+from .forms import *
 from django.contrib import messages
+from django.db.models import Q
+from .decorators import check_product_status
+import datetime
+import base64
 
 
 @login_required
@@ -12,6 +16,26 @@ def all_products(request):
 
     return render(request, 'products/product_table.html', {
         'products': products
+    })
+
+
+@login_required
+def upcoming_products(request):
+    upcoming_products = Product.objects.filter(
+        Q(status=ProductStatus.objects.get(
+            status='Pending - Awaiting Sign Off')) |
+        Q(status=ProductStatus.objects.get(
+            status='Pending - Awaiting Final Confirmation'))
+    ).order_by('start_date')
+    production_ready = Product.objects.filter(
+        status=ProductStatus.objects.get(
+            status='Completed - Production Ready'),
+        start_date__gte=(datetime.date.today() - datetime.timedelta(days=28))
+    ).order_by('start_date')
+
+    return render(request, 'products/upcoming_products.html', {
+        'upcoming_products': upcoming_products,
+        'production_ready': production_ready,
     })
 
 
