@@ -2,9 +2,19 @@
 {% load lookup %}
 {% block content %}
 <div class="container">
-    <h1 class="text-center">
-        <i class="fas fa-leaf"></i> Product Details
-    </h1>
+    <div class="row">
+        <div class="col-2">
+            <a href="{% url 'product_home' %}" class="btn btn-danger">
+                <i class="fas fa-arrow-left"></i> Back
+            </a>
+        </div>
+        <div class="col-8">
+            <h1 class="text-center">
+                <i class="fas fa-leaf"></i> Product Details
+            </h1>
+        </div>
+        <div class="col-2"></div>
+    </div>
     <hr>
     <div class="card">
         <div class="card-body">
@@ -14,12 +24,20 @@
         </div>
         <div class="card-footer">
             <div class="btn-group d-flex justify-content-center" role="group">
-                <a href="{% url 'delete_product' product.id %}" class="btn btn-danger">
-                    <i class="fas fa-times"></i> Delete
-                </a>
-                <a href="{% url 'edit_navigation' product.id %}" class="btn btn-warning">
-                    <i class="fas fa-edit"></i> Edit
-                </a>
+                {% if not product.is_ready %}
+                    {% if perms.products.add_product %}
+                        <a href="{% url 'delete_product' product.id %}" class="btn btn-danger">
+                            <i class="fas fa-times"></i> Delete
+                        </a>
+                    {% endif %}
+                    <a href="{% url 'edit_navigation' product.id %}" class="btn btn-warning">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+                {% elif product.is_ready and perms.products.add_product %}
+                    <a href="{% url 'reopen_product' product.id %}" class="btn btn-warning">
+                        <i class="fas fa-edit"></i> Reopen
+                    </a>
+                {% endif %}
                 <button class="btn btn-primary">
                     <i class="fas fa-print"></i> Print
                 </button>
