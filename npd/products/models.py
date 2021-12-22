@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from ancillaries.models import Customer, Department, Supplier, Defect
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
+from datetime import date, timedelta
+import base64
 
 
 class ProductStatus(models.Model):
@@ -10,7 +12,7 @@ class ProductStatus(models.Model):
 
     def __str__(self):
         return self.status
-    
+
     class Meta:
         verbose_name_plural = 'Product Statuses'
 
@@ -28,6 +30,44 @@ class Product(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
 
+    def is_ready(self):
+        return self.status == ProductStatus.objects.get(
+            status="Completed - Production Ready")
+
+    def is_final_confirmation(self):
+        return self.status == ProductStatus.objects.get(
+            status="Pending - Awaiting Final Confirmation")
+
+    # methods to check how far out product is from starting
+    def is_within_week(self):
+        return date.today() + timedelta(days=7) >= self.start_date
+
+    def is_within_fortnight(self):
+        return date.today() + timedelta(days=14) >= self.start_date
+
+    # For the product to be ready for signoff we require there to be at least
+    # one instance of each of the following models
+    def is_ready_for_signoff(self):
+        if self.is_ready() or self.is_final_confirmation():
+            return False
+
+        checks = [
+            CommercialModel,
+            InnerPackaging,
+            OuterPackaging,
+            Palletisation,
+            OperationsModel,
+            DefectSpecification,
+            FinishedProduct,
+            ProphetModel
+        ]
+
+        for check in checks:
+            if len(check.objects.filter(product=self)) == 0:
+                return False
+
+        return True
+
     def __str__(self):
         return str(self.product_name) + " - " + str(self.customer)
 
@@ -37,7 +77,7 @@ class Variety(models.Model):
 
     def __str__(self):
         return self.variety_name
-    
+
     class Meta:
         verbose_name_plural = 'Varieties'
 
@@ -56,15 +96,14 @@ class CommercialModel(models.Model):
         AMBIENT = 'AM', _('Ambient')
 
     product = models.OneToOneField(Product, on_delete=models.CASCADE)
-    start_date = models.DateField()
     product_branding = models.CharField(max_length=40)
     legal_product_description = models.CharField(max_length=40)
     case_count = models.IntegerField()
     weight_per_unit = models.CharField(max_length=20)
     product_code = models.IntegerField()
     delivered_state = models.CharField(
-        max_length=2, 
-        choices=DeliveredState.choices, 
+        max_length=2,
+        choices=DeliveredState.choices,
         default=DeliveredState.CHILLED
     )
     product_inner_barcode = models.IntegerField()
