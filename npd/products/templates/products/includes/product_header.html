@@ -12,6 +12,10 @@
             <strong>Customer:</strong>
             <span class="float-end">{{ product.customer }}</span>
         </li>
+        <li class="list-group-item">
+            <strong>Start Date:</strong>
+            <span class="float-end">{{ product.start_date }}</span>
+        </li>
     </ul>
 </div>
 <div class="col-12 col-md-6">
@@ -28,5 +32,11 @@
             <strong>Created By:</strong>
             <span class="float-end">{{ product.created_by }}</span>
         </li>
+        {% if product.signature %}
+            <li class="list-group-item">
+                <strong>Signature:</strong>
+                <img src="{{ product.signature }}" class="img-fluid border border-dark" alt="signature">
+            </li>
+        {% endif %}
     </ul>
 </div>
