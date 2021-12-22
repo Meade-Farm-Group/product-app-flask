@@ -1,53 +1,92 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container">
-    <h2 class="text-center">Edit Product: {{ product.product_name }}</h2>
+    <div class="row">
+        <div class="col-2">
+            <a href="{% url 'product_details' product.id %}" class="btn btn-danger">
+                <i class="fas fa-arrow-left"></i> Back
+            </a>
+        </div>
+        <div class="col-8">
+            <h2 class="text-center">Edit Product: {{ product.product_name }}</h2>
+        </div>
+        <div class="col-2"></div>
+    </div>
     <hr>
     <div class="row">
-        <div class="col-12 d-flex justify-content-center mb-2">
-            {% if commercial_details is None %}
-                <a href="{% url 'add_commercial_details' product.id %}" class="btn btn-lg btn-primary">
-                    <i class="fas fa-handshake"></i> Add Commercial Details
+        <!-- check user permissions -->
+        {% if perms.products.add_commercialmodel %}
+            <div class="col-12 d-flex justify-content-center mb-2">
+                <!-- check if the model has already been submitted, link to add if none there, edit otherwise -->
+                {% if commercial_details is None %}
+                    <a href="{% url 'add_commercial_details' product.id %}" class="btn btn-lg btn-primary">
+                        <i class="fas fa-handshake"></i> Add Commercial Details
+                    </a>
+                {% else %}
+                    <a href="{% url 'edit_commercial_details' product.id %}" class="btn btn-lg btn-warning">
+                        <i class="fas fa-handshake"></i> Edit Commercial Details
+                    </a>
+                {% endif %}
+            </div>
+        {% endif %}
+        {% if perms.products.add_operationsmodel %}
+            <div class="col-12 d-flex justify-content-center mb-2">
+                {% if operations_details is None %}
+                <a href="{% url 'add_operations_details' product.id %}" class="btn btn-lg btn-primary">
+                    <i class="fas fa-cogs"></i> Add Operations Details
                 </a>
-            {% else %}
-                <a href="{% url 'edit_commercial_details' product.id %}" class="btn btn-lg btn-warning">
-                    <i class="fas fa-handshake"></i> Edit Commercial Details
+                {% else %}
+                <a href="{% url 'edit_operations_details' product.id %}" class="btn btn-lg btn-warning">
+                    <i class="fas fa-cogs"></i> Edit Operations Details
                 </a>
-            {% endif %}
-        </div>
-        <div class="col-12 d-flex justify-content-center mb-2">
-            {% if operations_details is None %}
-            <a href="{% url 'add_operations_details' product.id %}" class="btn btn-lg btn-primary">
-                <i class="fas fa-cogs"></i> Add Operations Details
-            </a>
-            {% else %}
-            <a href="{% url 'edit_operations_details' product.id %}" class="btn btn-lg btn-warning">
-                <i class="fas fa-cogs"></i> Edit Operations Details
-            </a>
-            {% endif %}
-        </div>
-        <div class="col-12 d-flex justify-content-center mb-2">
-            {% if prophet_details is None %}
-                <a href="{% url 'add_prophet_details' product.id %}" class="btn btn-lg btn-primary">
-                    <i class="fas fa-database"></i> Add Prophet Details
+                {% endif %}
+            </div>
+        {% endif %}
+        {% if perms.products.add_prophetmodel %}
+            <div class="col-12 d-flex justify-content-center mb-2">
+                {% if prophet_details is None %}
+                    <a href="{% url 'add_prophet_details' product.id %}" class="btn btn-lg btn-primary">
+                        <i class="fas fa-database"></i> Add Prophet Details
+                    </a>
+                {% else %}
+                    <a href="{% url 'edit_prophet_details' product.id %}" class="btn btn-lg btn-warning">
+                        <i class="fas fa-database"></i> Edit Prophet Details
+                    </a>
+                {% endif %}
+            </div>
+        {% endif %}
+        {% if perms.products.add_finishedproduct or perms.products.add_palletisation %}
+            <hr>
+        {% endif %}
+        <!-- the technical and packaging details have many parts, not a single model, so we have to redirect to a new area -->
+        {% if perms.products.add_finishedproduct %}
+            <div class="col-12 d-flex justify-content-center mb-2">
+                <a href="{% url 'technical_navigation' product.id %}" class="btn btn-lg btn-primary">
+                    <i class="fas fa-eye"></i> Add Technical Details
                 </a>
-            {% else %}
-                <a href="{% url 'edit_prophet_details' product.id %}" class="btn btn-lg btn-warning">
-                    <i class="fas fa-database"></i> Edit Prophet Details
+            </div>
+        {% endif %}
+        {% if perms.products.add_palletisation %}
+            <div class="col-12 d-flex justify-content-center mb-2">
+                <a href="{% url 'packaging_navigation' product.id %}" class="btn btn-lg btn-primary">
+                    <i class="fas fa-boxes"></i> Add Packaging Details
                 </a>
-            {% endif %}
-        </div>
-        <hr>
-        <div class="col-12 d-flex justify-content-center mb-2">
-            <a href="{% url 'technical_navigation' product.id %}" class="btn btn-lg btn-primary">
-                <i class="fas fa-eye"></i> Add Technical Details
-            </a>
-        </div>
-        <div class="col-12 d-flex justify-content-center mb-2">
-            <a href="{% url 'packaging_navigation' product.id %}" class="btn btn-lg btn-primary">
-                <i class="fas fa-boxes"></i> Add Packaging Details
-            </a>
-        </div>
+            </div>
+        {% endif %}
+        <!-- check if user is viewer, if is then display following text -->
+        {% if not perms.products.add_palletisation and not perms.products.add_finishedproduct and not perms.products.add_prophetmodel and not perms.products.add_operationsmodel and not perms.products.add_commercialmodel %}
+            <h4 class="text-center text-warning">
+                <i class="fa fa-exclamation-circle" aria-hidden="true"></i> No Actions Available!
+            </h4>
+        {% endif %}
+        {% if perms.products.add_commercialmodel and product.is_final_confirmation %}
+            <hr>
+            <div class="col-12 d-flex justify-content-center mb-2">
+                <a href="{% url 'signoff_product' product.id %}" class="btn btn-lg btn-success">
+                    <i class="fas fa-check"></i> Final Sign Off
+                </a>
+            </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
