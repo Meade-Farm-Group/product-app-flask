@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h2 class="text-center">
+        Upcoming Products
+    </h2>
+    <hr>
+    <h3>
+        Production Ready <i class="fas fa-check"></i>
+    </h3>
+    <hr>
+    {% if production_ready.count > 0 %}
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Product Name</th>
+                        <th>Department</th>
+                        <th>Customer</th>
+                        <th>Start Date</th>
+                        <th>Status</th>
+                        <th>Created On</th>
+                        <th>Created By</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in production_ready %}
+                    <!-- highlight products depending how far out their start date is -->
+                        {% if product.is_within_week %}
+                        <tr class="table-success">
+                        {% else %}
+                        <tr>
+                        {% endif %}
+                            <td>{{ product.id }}</td>
+                            <th>{{ product.product_name }}</th>
+                            <td>{{ product.department }}</td>
+                            <td>{{ product.customer }}</td>
+                            <td>{{ product.start_date }}</td>
+                            <td>{{ product.status }}</td>
+                            <td>{{ product.created_on }}</td>
+                            <td>{{ product.created_by }}</td>
+                            <td>
+                                <a href="{% url 'product_details' product.id %}" class="btn btn-success">
+                                    View <i class="fas fa-eye"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <h4 class="text-center text-success">
+            No Upcoming Production Ready Products! <i class="fa fa-check" aria-hidden="true"></i>
+        </h4>
+    {% endif %}
+    <hr>
+    <h3>
+        Pending <i class="fa fa-cogs" aria-hidden="true"></i>
+    </h3>
+    <hr>
+    {% if upcoming_products.count > 0 %}
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Product Name</th>
+                        <th>Department</th>
+                        <th>Customer</th>
+                        <th>Start Date</th>
+                        <th>Status</th>
+                        <th>Created On</th>
+                        <th>Created By</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in upcoming_products %}
+                        {% if product.is_within_week %}
+                        <tr class="table-danger">
+                        {% elif product.is_within_fortnight %}
+                        <tr class="table-warning" %>
+                        {% else %}
+                        <tr>
+                        {% endif %}
+                            <td>{{ product.id }}</td>
+                            <th>{{ product.product_name }}</th>
+                            <td>{{ product.department }}</td>
+                            <td>{{ product.customer }}</td>
+                            <td>{{ product.start_date }}</td>
+                            <td>{{ product.status }}</td>
+                            <td>{{ product.created_on }}</td>
+                            <td>{{ product.created_by }}</td>
+                            <td>
+                                <a href="{% url 'product_details' product.id %}" class="btn btn-success">
+                                    View <i class="fas fa-eye"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <h4 class="text-center text-check">
+            No Pending Products! <i class="fa fa-check" aria-hidden="true"></i>
+        </h4>
+    {% endif %}
+</div>
+{% endblock %}
