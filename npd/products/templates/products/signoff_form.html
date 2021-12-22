@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container">
+    <div class="card">
+        <form action="{% url 'signoff_product' product.id %}" id="signature-form" method="post">
+            <div class="card-header">
+                <h3>
+                    Final Sign Off
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    {% include "products/includes/product_header.html" %}
+                    <hr>
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="col-12 col-md-6">
+                            {{ field|as_crispy_field }}
+                        </div>
+                    {% endfor %}
+                    <div class="col-12">
+                        <h4 class="text-center" id="signature-notification">Draw your signature in the field below.</h4>
+                    </div>
+                    <div class="col-12">
+                        <canvas id="signature-pad"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button class="btn btn-success" id="submit-sig" type="submit">
+                    <i class="fas fa-check"></i> Submit
+                </button>
+                <button class="btn btn-primary" type="button" id="clear-sig">
+                    <i class="fas fa-edit"></i> Clear
+                </button>
+                <a href="{% url 'product_details' product.id %}" class="btn btn-danger">
+                    <i class="fas fa-times"></i> Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+{% block extrajs %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@2.3.2/dist/signature_pad.min.js"></script>
+<script src="{% static 'js/signature.js' %}"></script>
+{% endblock %}
