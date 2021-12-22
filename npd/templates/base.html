@@ -16,7 +16,7 @@
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-success">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">
+                <a class="navbar-brand" href="{% url 'home' %}">
                     <img src="{% static 'images/meade_farm_logo.png' %}" alt="logo" height="60" width="100">
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -29,11 +29,12 @@
                         </li>
                         {% if user.is_authenticated %}
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'product_home' %}">Upcoming Products</a>
+                                <a class="nav-link" href="{% url 'upcoming_products' %}">Upcoming Products</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'product_home' %}">All Products</a>
                             </li>
+                            <!-- the perms object contains the users permissions, we want to check if they are allowed to create products -->
                             {% if perms.products.add_product %}
                                 <li class="nav-item">
                                     <a class="nav-link" href="{% url 'create_product' %}">Create New Product</a>
