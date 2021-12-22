@@ -8,10 +8,14 @@ class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
         exclude = [
+            'signature',
             'status',
             'created_on',
             'created_by',
         ]
+        widgets = {
+            'start_date': DateInput(),
+        }
 
 
 class CommercialForm(forms.ModelForm):
@@ -23,9 +27,6 @@ class CommercialForm(forms.ModelForm):
             'created_on',
             'created_by',
         ]
-        widgets = {
-            'start_date': DateInput(),
-        }
 
 
 class OperationsForm(forms.ModelForm):

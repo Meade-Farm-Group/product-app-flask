@@ -17,9 +17,14 @@ class ProductStatus(models.Model):
 
 class Product(models.Model):
     product_name = models.CharField(max_length=40)
-    department = models.ForeignKey(Department, null=True, on_delete=models.SET_NULL)
-    customer = models.ForeignKey(Customer, null=True, on_delete=models.SET_NULL)
-    status = models.ForeignKey(ProductStatus, null=True, on_delete=models.SET_NULL)
+    department = models.ForeignKey(
+        Department, null=True, on_delete=models.SET_NULL)
+    customer = models.ForeignKey(
+        Customer, null=True, on_delete=models.SET_NULL)
+    start_date = models.DateField()
+    status = models.ForeignKey(
+        ProductStatus, null=True, on_delete=models.SET_NULL)
+    signature = models.CharField(null=True, max_length=1000000)
     created_on = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
 

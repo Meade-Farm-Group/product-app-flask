@@ -7,6 +7,7 @@ class ProductAdmin(admin.ModelAdmin):
         'product_name',
         'department',
         'customer',
+        'start_date',
         'status',
         'created_on',
         'created_by',
@@ -16,7 +17,6 @@ class ProductAdmin(admin.ModelAdmin):
 class CommercialAdmin(admin.ModelAdmin):
     list_display = (
         'product',
-        'start_date',
         'legal_product_description',
         'case_count',
         'weight_per_unit',
