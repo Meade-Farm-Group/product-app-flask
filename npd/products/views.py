@@ -108,6 +108,7 @@ def create_product(request):
 
 
 @login_required
+@check_product_status
 def edit_navigation(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     commercial_details = CommercialModel.objects.filter(
@@ -125,6 +126,8 @@ def edit_navigation(request, product_id):
 
 
 @login_required
+@check_product_status
+@permission_required('products.add_commercialmodel', raise_exception=True)
 def add_commercial_details(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
 
@@ -163,7 +166,13 @@ def add_commercial_details(request, product_id):
     })
 
 
+# if a user has the "add" permission for a model they'll
+# also have the "change" permission for the model
+# hence why we only need to check the add permission even though
+# this is an "edit" (change) view
 @login_required
+@check_product_status
+@permission_required('products.add_commercialmodel', raise_exception=True)
 def edit_commercial_details(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     commercial_details = get_object_or_404(CommercialModel, product=product_id)
@@ -191,6 +200,8 @@ def edit_commercial_details(request, product_id):
 
 
 @login_required
+@check_product_status
+@permission_required('products.add_operationsmodel', raise_exception=True)
 def add_operations_details(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     if len(OperationsModel.objects.filter(product=product_id)) > 0:
@@ -225,6 +236,8 @@ def add_operations_details(request, product_id):
 
 
 @login_required
+@check_product_status
+@permission_required('products.add_operationsmodel', raise_exception=True)
 def edit_operations_details(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     operations_details = get_object_or_404(OperationsModel, product=product_id)
@@ -251,6 +264,8 @@ def edit_operations_details(request, product_id):
 
 
 @login_required
+@check_product_status
+@permission_required('products.add_finishedproduct', raise_exception=True)
 def technical_navigation(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     finished_spec = FinishedProduct.objects.filter(product=product_id).first()
@@ -262,6 +277,8 @@ def technical_navigation(request, product_id):
 
 
 @login_required
+@check_product_status
+@permission_required('products.add_finishedproduct', raise_exception=True)
 def add_finished_specification(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
 
@@ -300,6 +317,8 @@ def add_finished_specification(request, product_id):
 
 
 @login_required
+@check_product_status
+@permission_required('products.add_finishedproduct', raise_exception=True)
 def edit_finished_specification(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     finished_spec = get_object_or_404(FinishedProduct, product=product_id)
@@ -329,6 +348,8 @@ def edit_finished_specification(request, product_id):
 
 
 @login_required
+@check_product_status
+@permission_required('products.add_defectspecification', raise_exception=True)
 def add_defect_specification(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
 
@@ -355,6 +376,8 @@ def add_defect_specification(request, product_id):
 
 
 @login_required
+@check_product_status
+@permission_required('products.add_defectspecification', raise_exception=True)
 def edit_defect_specification(request, product_id, defect_spec_id):
     product = get_object_or_404(Product, pk=product_id)
     defect_spec = get_object_or_404(DefectSpecification, pk=defect_spec_id)
@@ -386,6 +409,8 @@ def edit_defect_specification(request, product_id, defect_spec_id):
 
 
 @login_required
+@check_product_status
+@permission_required('products.add_defectspecification', raise_exception=True)
 def product_defects(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     defects = DefectSpecification.objects.filter(product=product)
@@ -397,6 +422,8 @@ def product_defects(request, product_id):
 
 
 @login_required
+@check_product_status
+@permission_required('products.add_defectspecification', raise_exception=True)
 def delete_defect_specification(request, product_id, defect_spec_id):
     product = get_object_or_404(Product, pk=product_id)
     defect_spec = get_object_or_404(DefectSpecification, pk=defect_spec_id)
@@ -415,6 +442,8 @@ def delete_defect_specification(request, product_id, defect_spec_id):
 
 
 @login_required
+@check_product_status
+@permission_required('products.add_prophetmodel', raise_exception=True)
 def add_prophet_details(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     if len(ProphetModel.objects.filter(product=product_id)) > 0:
@@ -445,6 +474,8 @@ def add_prophet_details(request, product_id):
 
 
 @login_required
+@check_product_status
+@permission_required('products.add_prophetmodel', raise_exception=True)
 def edit_prophet_details(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     prophet_details = get_object_or_404(ProphetModel, product=product_id)
@@ -469,6 +500,8 @@ def edit_prophet_details(request, product_id):
 
 
 @login_required
+@check_product_status
+@permission_required('products.add_innerpackaging', raise_exception=True)
 def packaging_navigation(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     palletisation = Palletisation.objects.filter(product=product_id).first()
@@ -480,6 +513,8 @@ def packaging_navigation(request, product_id):
 
 
 @login_required
+@check_product_status
+@permission_required('products.add_palletisation', raise_exception=True)
 def add_palletisation_spec(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     if len(Palletisation.objects.filter(product=product_id)) > 0:
@@ -514,6 +549,8 @@ def add_palletisation_spec(request, product_id):
 
 
 @login_required
+@check_product_status
+@permission_required('products.add_palletisation', raise_exception=True)
 def edit_palletisation_spec(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     palletisation_details = get_object_or_404(
@@ -541,6 +578,8 @@ def edit_palletisation_spec(request, product_id):
 
 
 @login_required
+@check_product_status
+@permission_required('products.add_innerpackaging', raise_exception=True)
 def inner_packaging_table(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     inner_packaging = InnerPackaging.objects.filter(product=product)
@@ -552,6 +591,8 @@ def inner_packaging_table(request, product_id):
 
 
 @login_required
+@check_product_status
+@permission_required('products.add_innerpackaging', raise_exception=True)
 def add_inner_packaging(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
 
@@ -580,6 +621,8 @@ def add_inner_packaging(request, product_id):
 
 
 @login_required
+@check_product_status
+@permission_required('products.add_innerpackaging', raise_exception=True)
 def edit_inner_packaging(request, product_id, inner_pack_id):
     product = get_object_or_404(Product, pk=product_id)
     inner_packaging = get_object_or_404(InnerPackaging, pk=inner_pack_id)
@@ -608,6 +651,8 @@ def edit_inner_packaging(request, product_id, inner_pack_id):
 
 
 @login_required
+@check_product_status
+@permission_required('products.add_outerpackaging', raise_exception=True)
 def outer_packaging_table(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     outer_packaging = OuterPackaging.objects.filter(product=product)
@@ -619,6 +664,8 @@ def outer_packaging_table(request, product_id):
 
 
 @login_required
+@check_product_status
+@permission_required('products.add_outerpackaging', raise_exception=True)
 def add_outer_packaging(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
 
@@ -644,6 +691,8 @@ def add_outer_packaging(request, product_id):
 
 
 @login_required
+@check_product_status
+@permission_required('products.add_outerpackaging', raise_exception=True)
 def edit_outer_packaging(request, product_id, outer_pack_id):
     product = get_object_or_404(Product, pk=product_id)
     outer_packaging = get_object_or_404(OuterPackaging, pk=outer_pack_id)
@@ -672,6 +721,8 @@ def edit_outer_packaging(request, product_id, outer_pack_id):
 
 
 @login_required
+@check_product_status
+@permission_required('products.add_outerpackaging', raise_exception=True)
 def delete_outer_packaging(request, product_id, outer_pack_id):
     product = get_object_or_404(Product, pk=product_id)
     outer_packaging = get_object_or_404(OuterPackaging, pk=outer_pack_id)
@@ -691,6 +742,8 @@ def delete_outer_packaging(request, product_id, outer_pack_id):
 
 
 @login_required
+@check_product_status
+@permission_required('products.add_innerpackaging', raise_exception=True)
 def delete_inner_packaging(request, product_id, inner_pack_id):
     product = get_object_or_404(Product, pk=product_id)
     inner_packaging = get_object_or_404(InnerPackaging, pk=inner_pack_id)
@@ -710,6 +763,8 @@ def delete_inner_packaging(request, product_id, inner_pack_id):
 
 
 @login_required
+@check_product_status
+@permission_required('products.add_product', raise_exception=True)
 def delete_product(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
 
