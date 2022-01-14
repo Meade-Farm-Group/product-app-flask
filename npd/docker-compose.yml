@@ -15,20 +15,21 @@ services:
   web:
     build: .
     image: npd-django-app # change as per application
-    command: gunicorn --bind 0.0.0.0:5000 -t 0 --workers=15 --timeout 0 npd.wsgi # change port number
+    command: gunicorn --bind 0.0.0.0:5002 -t 0 --workers=15 --timeout 0 npd.wsgi # change port number
     volumes:
       - .:/usr/src/app
     expose:
-      - 5000 # port for web traffic
+      - 5002 # port for web traffic
       - 1433 # port for mysql
       - 3306 # port for ms sql (prophet)
+      - 587 # port for mail
     depends_on:
       - psql_db
   nginx:
     build: ./nginx
     image: npd-nginx # change as per application
     ports:
-      - 5000:80 # change port number
+      - 5002:80 # change port number
     depends_on:
       - web
 volumes:
