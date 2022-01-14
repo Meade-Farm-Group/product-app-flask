@@ -1,0 +1,1 @@
+[{"model": "products.productstatus", "pk": 1, "fields": {"status": "Completed - Production Ready"}}, {"model": "products.productstatus", "pk": 2, "fields": {"status": "Pending - Awaiting Sign Off"}}, {"model": "products.productstatus", "pk": 3, "fields": {"status": "Pending - Awaiting Final Confirmation"}}]
