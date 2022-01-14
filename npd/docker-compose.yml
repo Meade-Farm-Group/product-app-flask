@@ -1,0 +1,35 @@
+version: '2'
+
+services:
+  psql_db:
+    image: postgres:12.1
+    environment:
+      POSTGRES_USER: npd
+      POSTGRES_PASSWORD: npd
+      POSTGRES_DB: npd
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    restart: always
+  web:
+    build: .
+    image: npd-django-app # change as per application
+    command: gunicorn --bind 0.0.0.0:5000 -t 0 --workers=15 --timeout 0 npd.wsgi # change port number
+    volumes:
+      - .:/usr/src/app
+    expose:
+      - 5000 # port for web traffic
+      - 1433 # port for mysql
+      - 3306 # port for ms sql (prophet)
+    depends_on:
+      - psql_db
+  nginx:
+    build: ./nginx
+    image: npd-nginx # change as per application
+    ports:
+      - 5000:80 # change port number
+    depends_on:
+      - web
+volumes:
+  postgres:

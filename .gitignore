@@ -131,3 +131,4 @@ dmypy.json
 # Project Specific
 env.py
 .vscode
+staticfiles/
