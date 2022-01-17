@@ -4,7 +4,13 @@ from ancillaries.models import Customer, Department, Supplier, Defect
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 from datetime import date, timedelta
-import base64
+from products.sql_queries import get_varieties, get_origins, get_suppliers, get_packaging_suppliers
+
+
+VARIETY_CHOICES = get_varieties()
+ORIGIN_CHOICES = get_origins()
+SUPPLIER_CHOICES = get_suppliers()
+PACKAGING_SUPPLIER_CHOICES = get_packaging_suppliers()
 
 
 class ProductStatus(models.Model):
