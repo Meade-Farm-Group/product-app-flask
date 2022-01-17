@@ -1,5 +1,7 @@
 from django import forms
 from .models import (
+    ApprovedOrigin,
+    ApprovedVariety,
     DefectSpecification,
     FinishedProduct,
     InnerPackaging,
@@ -128,3 +130,21 @@ class SignOffForm(forms.Form):
             'id': 'signature-data',
         }
     ), label='')
+
+
+class ApprovedVarietyForm(forms.ModelForm):
+    """ Approved Variety Form """
+    class Meta:
+        model = ApprovedVariety
+        fields = [
+            'variety',
+        ]
+
+
+class ApprovedOriginForm(forms.ModelForm):
+    """ Approved Origin Form """
+    class Meta:
+        model = ApprovedOrigin
+        fields = [
+            'origin',
+        ]
