@@ -102,14 +102,35 @@ class CommercialModel(models.Model):
     display_until = models.CharField(max_length=20)
     best_before = models.CharField(max_length=20)
     julian_code = models.CharField(max_length=10)
-    approved_origins = models.ManyToManyField(Origin)
-    approved_varieties = models.ManyToManyField(Variety)
-    approved_suppliers = models.ManyToManyField(Supplier)
     created_on = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return f'{self.product} Commercial Details'
+
+
+class ApprovedOrigin(models.Model):
+    product = models.ForeignKey(Product, null=True, on_delete=models.CASCADE)
+    origin = models.CharField(choices=ORIGIN_CHOICES, max_length=100, null=True)
+
+    def __str__(self):
+        return f'{self.product} - {self.origin}'
+
+
+class ApprovedVariety(models.Model):
+    product = models.ForeignKey(Product, null=True, on_delete=models.CASCADE)
+    variety = models.CharField(choices=VARIETY_CHOICES, max_length=100, null=True)
+
+    def __str__(self):
+        return f'{self.product} - {self.variety}'
+
+
+class ApprovedSupplier(models.Model):
+    product = models.ForeignKey(Product, null=True, on_delete=models.CASCADE)
+    supplier = models.CharField(choices=SUPPLIER_CHOICES, max_length=100, null=True)
+
+    def __str__(self):
+        return f'{self.product} - {self.supplier}'
 
 
 class OperationsModel(models.Model):
