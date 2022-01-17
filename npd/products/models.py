@@ -216,8 +216,9 @@ class InnerPackaging(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     branding = models.CharField(max_length=20)
     artwork_provided = models.BooleanField()
-    supplier = models.ForeignKey(
-        Supplier, null=True, on_delete=models.SET_NULL)
+    supplier = models.CharField(
+        choices=PACKAGING_SUPPLIER_CHOICES,
+        max_length=100, null=True)
     packaging_type = models.CharField(
         max_length=20,
         choices=PackagingTypes.choices,
@@ -255,8 +256,9 @@ class OuterPackaging(models.Model):
         choices=PackagingTypes.choices,
         default=PackagingTypes.CARDBOARD
     )
-    supplier = models.ForeignKey(
-        Supplier, null=True, on_delete=models.SET_NULL)
+    supplier = models.CharField(
+        choices=PACKAGING_SUPPLIER_CHOICES,
+        max_length=100, null=True)
     outer_dimensions = models.CharField(max_length=30)
     outer_case_label = models.BooleanField()
     outer_case_card = models.BooleanField()
