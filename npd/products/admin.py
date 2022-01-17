@@ -95,10 +95,29 @@ class PalletisationAdmin(admin.ModelAdmin):
     )
 
 
+class ApprovedOriginAdmin(admin.ModelAdmin):
+    list_display = (
+        'product',
+        'origin',
+    )
+
+
+class ApprovedVarietyAdmin(admin.ModelAdmin):
+    list_display = (
+        'product',
+        'variety',
+    )
+
+
+class ApprovedSupplierAdmin(admin.ModelAdmin):
+    list_display = (
+        'product',
+        'supplier',
+    )
+
+
 admin.site.register(Product, ProductAdmin)
 admin.site.register(ProductStatus)
-admin.site.register(Variety)
-admin.site.register(Origin)
 admin.site.register(CommercialModel, CommercialAdmin)
 admin.site.register(OperationsModel, OperationsAdmin)
 admin.site.register(FinishedProduct, FinishedProductAdmin)
@@ -107,3 +126,6 @@ admin.site.register(ProphetModel, ProphetModelAdmin)
 admin.site.register(InnerPackaging, InnerPackagingAdmin)
 admin.site.register(OuterPackaging, OuterPackagingAdmin)
 admin.site.register(Palletisation, PalletisationAdmin)
+admin.site.register(ApprovedOrigin, ApprovedOriginAdmin)
+admin.site.register(ApprovedVariety, ApprovedVarietyAdmin)
+admin.site.register(ApprovedSupplier, ApprovedSupplierAdmin)
