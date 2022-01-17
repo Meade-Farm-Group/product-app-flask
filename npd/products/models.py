@@ -78,23 +78,6 @@ class Product(models.Model):
         return str(self.product_name) + " - " + str(self.customer)
 
 
-class Variety(models.Model):
-    variety_name = models.CharField(max_length=40)
-
-    def __str__(self):
-        return self.variety_name
-
-    class Meta:
-        verbose_name_plural = 'Varieties'
-
-
-class Origin(models.Model):
-    origin_name = models.CharField(max_length=40)
-
-    def __str__(self):
-        return self.origin_name
-
-
 class CommercialModel(models.Model):
 
     class DeliveredState(models.TextChoices):
