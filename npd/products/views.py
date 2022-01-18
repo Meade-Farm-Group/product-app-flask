@@ -867,3 +867,49 @@ def approved_origin_table(request, product_id):
         'approved_origins': approved_origins,
     })
 
+
+@login_required
+@check_product_status
+@permission_required('products.add_commercialmodel', raise_exception=True)
+def add_approved_origin(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+
+    if request.method == 'POST':
+        form = ApprovedOriginForm(request.POST)
+        if form.is_valid():
+            approved_origin = form.save(commit=False)
+            approved_origin.product = product
+            approved_origin.save()
+            messages.success(
+                request, "Approved Origin Successfully Added!")
+            return redirect(reverse(approved_origin_table, args=[product.id]))
+    else:
+        form = ApprovedOriginForm()
+    
+    return render(request, 'products/approved_origin_form.html', {
+        'product': product,
+        'form': form,
+    })
+
+
+@login_required
+@check_product_status
+@permission_required('products.add_commercialmodel', raise_exception=True)
+def delete_approved_origin(request, product_id, appr_orig_id):
+    product = get_object_or_404(Product, pk=product_id)
+    approved_origin = get_object_or_404(ApprovedOrigin, pk=appr_orig_id)
+
+    if request.method == 'POST':
+        approved_origin.delete()
+        messages.warning(request, "Approved Origin Successfully Deleted!")
+        return redirect(reverse(product_details, args=[product.id]))
+
+    return render(request, 'products/confirm_delete.html', {
+        'delete': 'Approved Origin',
+        'action': reverse(
+            delete_approved_origin,
+            args=[product.id, approved_origin.id]),
+        'cancel': reverse(product_details, args=[product.id]),
+    })
+
+
