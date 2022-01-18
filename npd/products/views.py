@@ -840,3 +840,17 @@ def reopen_product(request, product_id):
         ),
         'cancel': reverse(product_details, args=[product.id])
     })
+
+
+@login_required
+@check_product_status
+@permission_required('products.add_commercialmodel', raise_exception=True)
+def commercial_navigation(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    commercial_model = CommercialModel.objects.filter(product=product_id).first()
+
+    return render(request, 'products/commercial_navigation.html', {
+        'product': product,
+        'commercial_model': commercial_model,
+    })
+

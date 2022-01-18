@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-2">
+            <a href="{% url 'product_details' product.id %}" class="btn btn-danger">
+                <i class="fas fa-arrow-left"></i> Back
+            </a>
+        </div>
+        <div class="col-8">
+            <h2 class="text-center">
+                Edit Commercial Details For Product: {{ product.product_name }}
+            </h2>
+        </div>
+        <div class="col-2"></div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-12 d-flex justify-content-center mb-2">
+            {% if commercial_model is None %}
+                <a href="{% url 'add_commercial_details' product.id %}" class="btn btn-lg btn-primary">
+                    Add Commercial Details
+                </a>
+            {% else %}
+                <a href="{% url 'edit_commercial_details' product.id %}" class="btn btn-lg btn-warning">
+                    Edit Commercial Details
+                </a>
+            {% endif %}
+        </div>
+        <hr>
+        <div class="col-12 d-flex justify-content-center mb-2">
+            <a href="{% url 'approved_origin_table' product.id %}" class="btn btn-lg btn-primary">
+                View Approved Origins
+            </a>
+        </div>
+        <div class="col-12 d-flex justify-content-center mb-2">
+            <a href="{% url 'approved_variety_table' product.id %}" class="btn btn-lg btn-primary">
+                View Approved Varieties
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
