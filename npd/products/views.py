@@ -854,3 +854,16 @@ def commercial_navigation(request, product_id):
         'commercial_model': commercial_model,
     })
 
+
+@login_required
+@check_product_status
+@permission_required('products.add_commercialmodel', raise_exception=True)
+def approved_origin_table(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    approved_origins = ApprovedOrigin.objects.filter(product=product)
+
+    return render(request, 'products/approved_origins_table.html', {
+        'product': product,
+        'approved_origins': approved_origins,
+    })
+
