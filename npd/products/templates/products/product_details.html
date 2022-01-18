@@ -1,10 +1,11 @@
 {% extends "base.html" %}
+{% load static %}
 {% load lookup %}
 {% block content %}
 <div class="container">
     <div class="row">
         <div class="col-2">
-            <a href="{% url 'product_home' %}" class="btn btn-danger">
+            <a id="back_button" href="{% url 'product_home' %}" class="btn btn-danger">
                 <i class="fas fa-arrow-left"></i> Back
             </a>
         </div>
@@ -38,7 +39,7 @@
                         <i class="fas fa-edit"></i> Reopen
                     </a>
                 {% endif %}
-                <button class="btn btn-primary">
+                <button class="btn btn-primary" id="print_button">
                     <i class="fas fa-print"></i> Print
                 </button>
             </div>
@@ -50,6 +51,54 @@
     </h2>
     <hr>
     {% include "products/includes/details_template.html" with details=commercial_details keys=commercial_details_keys %}
+    <hr>
+    <div class="row">
+        <div class="col-6">
+            <h4 class="text-info"><i>Approved Origins</i></h4>
+            <hr>
+            {% if approved_origins.count > 0 %}
+                <ul class="list-group list-group-flush">
+                    {% for origin in approved_origins %}
+                        <li class="list-group-item">{{ origin.origin }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <h5 class="text-center">
+                    <i class="fas fa-exclamation-circle"></i> No Details Available!
+                </h5>
+            {% endif %}
+        </div>
+        <div class="col-6">
+            <h4 class="text-info"><i>Approved Varieties</i></h4>
+            <hr>
+            {% if approved_varieties.count > 0 %}
+                <ul class="list-group list-group-flush">
+                    {% for variety in approved_varieties %}
+                        <li class="list-group-item">{{ variety.variety }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <h5 class="text-center">
+                    <i class="fas fa-exclamation-circle"></i> No Details Available!
+                </h5>
+            {% endif %}
+        </div>
+        <div class="col-6">
+            <h4 class="text-info"><i>Approved Suppliers</i></h4>
+            <hr>
+            {% if approved_suppliers.count > 0 %}
+                <ul class="list-group list-group-flush">
+                    {% for supplier in approved_suppliers %}
+                        <li class="list-group-item">{{ supplier.supplier }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <h5 class="text-center">
+                    <i class="fas fa-exclamation-circle"></i> No Details Available!
+                </h5>
+            {% endif %}
+        </div>
+    </div>
     <hr>
     <h2 class="text-primary">
         <i class="fas fa-boxes"></i> Packaging Details
@@ -139,4 +188,8 @@
     {% include "products/includes/details_template.html" with details=prophet_details keys=prophet_details_keys %}
     <hr>
 </div>
+{% endblock %}
+{% block extrajs %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="{% static 'js/print.js' %}"></script>
 {% endblock %}
