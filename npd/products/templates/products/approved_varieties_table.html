@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-10">
+            <h2 class="text-center">
+                Approved Varieties: {{ product.product_name }}
+            </h2>
+        </div>
+        <div class="col-2">
+            <a href="{% url 'add_approved_variety' product.id %}" class="btn btn-lg btn-success">
+                <i class="fas fa-plus"></i>
+                Add
+            </a>
+        </div>
+    </div>
+    <hr>
+    {% if approved_varieties.count > 0 %}
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Variety</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for variety in approved_varieties %}
+                        <tr>
+                            <th>{{ forloop.counter }}</th>
+                            <td>{{ variety.variety }}</td>
+                            <td>
+                                <div class="btn-group">
+                                    <a href="{% url 'delete_approved_variety' product.id variety.id %}" class="btn btn-danger">Delete</a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <h4 class="text-center">
+            <i class="fas fa-times"></i> No Varieties To Show!
+        </h4>
+    {% endif %}
+</div>
+{% endblock %}

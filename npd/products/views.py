@@ -913,3 +913,16 @@ def delete_approved_origin(request, product_id, appr_orig_id):
     })
 
 
+@login_required
+@check_product_status
+@permission_required('products.add_commercialmodel', raise_exception=True)
+def approved_variety_table(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    approved_varieties = ApprovedVariety.objects.filter(product=product)
+
+    return render(request, 'products/approved_varieties_table.html', {
+        'product': product,
+        'approved_varieties': approved_varieties,
+    })
+
+
