@@ -15,20 +15,6 @@
     <hr>
     <div class="row">
         <!-- check user permissions -->
-        {% if perms.products.add_commercialmodel %}
-            <div class="col-12 d-flex justify-content-center mb-2">
-                <!-- check if the model has already been submitted, link to add if none there, edit otherwise -->
-                {% if commercial_details is None %}
-                    <a href="{% url 'add_commercial_details' product.id %}" class="btn btn-lg btn-primary">
-                        <i class="fas fa-handshake"></i> Add Commercial Details
-                    </a>
-                {% else %}
-                    <a href="{% url 'edit_commercial_details' product.id %}" class="btn btn-lg btn-warning">
-                        <i class="fas fa-handshake"></i> Edit Commercial Details
-                    </a>
-                {% endif %}
-            </div>
-        {% endif %}
         {% if perms.products.add_operationsmodel %}
             <div class="col-12 d-flex justify-content-center mb-2">
                 {% if operations_details is None %}
@@ -58,7 +44,14 @@
         {% if perms.products.add_finishedproduct or perms.products.add_palletisation %}
             <hr>
         {% endif %}
-        <!-- the technical and packaging details have many parts, not a single model, so we have to redirect to a new area -->
+        <!-- the commercial, technical and packaging details have many parts, not a single model, so we have to redirect to a new area -->
+        {% if perms.products.add_commercialmodel %}
+            <div class="col-12 d-flex justify-content-center mb-2">
+                <a href="{% url 'commercial_navigation' product.id %}" class="btn btn-lg btn-primary">
+                    <i class="fas fa-handshake"></i> Add Commercial Details
+                </a>
+            </div>
+        {% endif %}
         {% if perms.products.add_finishedproduct %}
             <div class="col-12 d-flex justify-content-center mb-2">
                 <a href="{% url 'technical_navigation' product.id %}" class="btn btn-lg btn-primary">
