@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from ancillaries.models import Customer, Department, Supplier, Defect
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
+from django.core.validators import RegexValidator
 from datetime import date, timedelta
 from products.sql_queries import get_varieties, get_origins, get_suppliers, get_packaging_suppliers
 
@@ -12,6 +13,7 @@ ORIGIN_CHOICES = get_origins()
 SUPPLIER_CHOICES = get_suppliers()
 PACKAGING_SUPPLIER_CHOICES = get_packaging_suppliers()
 
+WEIGHT_VALIDATOR = RegexValidator(r'[g, kg]$', "Must end with g or kg")
 
 class ProductStatus(models.Model):
     status = models.CharField(max_length=40)
@@ -102,6 +104,7 @@ class CommercialModel(models.Model):
     display_until = models.CharField(max_length=20)
     best_before = models.CharField(max_length=20)
     julian_code = models.CharField(max_length=10)
+    organic = models.BooleanField()
     created_on = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
 
@@ -140,7 +143,7 @@ class OperationsModel(models.Model):
         NOTOP = 'Not Operational', _('Not Operational')
 
     product = models.OneToOneField(Product, on_delete=models.CASCADE)
-    test_date = models.DateField()
+    test_date = models.DateField(verbose_name='Production Run Test Date')
     packing_equipment_test = models.CharField(max_length=20)
     test_result = models.CharField(
         max_length=20,
@@ -166,12 +169,9 @@ class FinishedProduct(models.Model):
 
     product = models.OneToOneField(Product, on_delete=models.CASCADE)
     declared_weight_volume = models.CharField(max_length=20)
-    tare_weight = models.CharField(max_length=20)
-    minimum_weight_volume = models.CharField(max_length=20)
-    target_weight_volume = models.CharField(max_length=20)
-    maximum_weight_volume = models.CharField(max_length=20)
+    tare_weight = models.CharField(max_length=20, validators=[WEIGHT_VALIDATOR])
     e_mark = models.BooleanField()
-    average_weight = models.CharField(max_length=20)
+    packaging_artwork_approved = models.BooleanField()
     created_on = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
 
@@ -230,7 +230,7 @@ class InnerPackaging(models.Model):
         default=Grades.NA
     )
     dimensions = models.CharField(max_length=30)
-    key_line = models.CharField(max_length=20)
+    key_line = models.BooleanField(verbose_name='Key Line Confirmed')
     recyclable = models.BooleanField()
     biodegradable = models.BooleanField()
     packaging_ordered = models.BooleanField()

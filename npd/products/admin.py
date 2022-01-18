@@ -37,7 +37,6 @@ class FinishedProductAdmin(admin.ModelAdmin):
         'product',
         'declared_weight_volume',
         'e_mark',
-        'average_weight',
         'created_on',
         'created_by'
     )
