@@ -60,11 +60,17 @@ def product_details(request, product_id):
     defect_specs = DefectSpecification.objects.filter(product=product_id)
     prophet_details = ProphetModel.objects.filter(
         product=product_id).first()
+    approved_origins = ApprovedOrigin.objects.filter(product=product_id)
+    approved_varieties = ApprovedVariety.objects.filter(product=product_id)
+    approved_suppliers = ApprovedSupplier.objects.filter(product=product_id)
 
     return render(request, 'products/product_details.html', {
         'product': product,
         'commercial_details': commercial_details,
         'commercial_details_keys': CommercialModel._meta.get_fields(),
+        'approved_origins': approved_origins,
+        'approved_varieties': approved_varieties,
+        'approved_suppliers': approved_suppliers,
         'operations_details': operations_details,
         'operations_details_keys': OperationsModel._meta.get_fields(),
         'inner_packaging': inner_packaging,
@@ -968,4 +974,68 @@ def delete_approved_variety(request, product_id, appr_var_id):
             delete_approved_variety,
             args=[product.id, approved_variety.id]),
         'cancel': reverse(product_details, args=[product.id]),
+    })
+
+
+@login_required
+@check_product_status
+@permission_required('products.add_commercialmodel', raise_exception=True)
+def approved_supplier_table(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+    approved_suppliers = ApprovedSupplier.objects.filter(product=product)
+
+    return render(request, 'products/approved_suppliers_table.html', {
+        'product': product,
+        'approved_suppliers': approved_suppliers,
+    })
+
+
+@login_required
+@check_product_status
+@permission_required('products.add_commercialmodel', raise_exception=True)
+def add_approved_supplier(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+
+    if request.method == 'POST':
+        form = ApprovedSupplierForm(request.POST)
+        if form.is_valid():
+            approved_supplier = form.save(commit=False)
+            approved_supplier.product = product
+            approved_supplier.save()
+            messages.success(
+                request, "Approved Supplier Successfully Added!"
+            )
+            return redirect(reverse(approved_supplier_table, args=[product.id]))
+        else:
+            messages.error(
+                request, "There was an error with your form! Please Try Again!"
+            )
+    else:
+        form = ApprovedSupplierForm()
+    
+    return render(request, 'products/approved_supplier_form.html', {
+        'product': product,
+        'form': form,
+    })
+
+
+@login_required
+@check_product_status
+@permission_required('products.add_commercialmodel', raise_exception=True)
+def delete_approved_supplier(request, product_id, appr_supp_id):
+    product = get_object_or_404(Product, pk=product_id)
+    approved_supplier = get_object_or_404(ApprovedSupplier, pk=appr_supp_id)
+
+    if request.method == 'POST':
+        approved_supplier.delete()
+        messages.warning(request, "Approved Supplier Successfully Deleted!")
+        return redirect(reverse(product_details, args=[product.id]))
+    
+    return render(request, 'products/confirm_delete.html', {
+        'delete': 'Approved Supplier',
+        'action': reverse(
+            delete_approved_supplier,
+            args=[product.id, approved_supplier.id]
+        ),
+        'cancel': reverse(product_details, args=[product.id])
     })
