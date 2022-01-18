@@ -1,0 +1,4 @@
+/* print specific style rules */
+nav, #back_button, .card-footer, #logo {
+    display: none;
+}
