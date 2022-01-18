@@ -926,3 +926,46 @@ def approved_variety_table(request, product_id):
     })
 
 
+@login_required
+@check_product_status
+@permission_required('products.add_commercialmodel', raise_exception=True)
+def add_approved_variety(request, product_id):
+    product = get_object_or_404(Product, pk=product_id)
+
+    if request.method == 'POST':
+        form = ApprovedVarietyForm(request.POST)
+        if form.is_valid():
+            approved_variety = form.save(commit=False)
+            approved_variety.product = product
+            approved_variety.save()
+            messages.success(
+                request, "Approved Variety Successfully Added!")
+            return redirect(reverse(approved_variety_table, args=[product.id]))
+    else:
+        form = ApprovedVarietyForm()
+    
+    return render(request, 'products/approved_variety_form.html', {
+        'product': product,
+        'form': form,
+    })
+
+
+@login_required
+@check_product_status
+@permission_required('products.add_commercialmodel', raise_exception=True)
+def delete_approved_variety(request, product_id, appr_var_id):
+    product = get_object_or_404(Product, pk=product_id)
+    approved_variety = get_object_or_404(ApprovedVariety, pk=appr_var_id)
+
+    if request.method == 'POST':
+        approved_variety.delete()
+        messages.warning(request, "Approved Variety Successfully Deleted!")
+        return redirect(reverse(product_details, args=[product.id]))
+
+    return render(request, 'products/confirm_delete.html', {
+        'delete': 'Approved Variety',
+        'action': reverse(
+            delete_approved_variety,
+            args=[product.id, approved_variety.id]),
+        'cancel': reverse(product_details, args=[product.id]),
+    })
