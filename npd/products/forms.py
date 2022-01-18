@@ -1,6 +1,7 @@
 from django import forms
 from .models import (
     ApprovedOrigin,
+    ApprovedSupplier,
     ApprovedVariety,
     DefectSpecification,
     FinishedProduct,
@@ -147,4 +148,13 @@ class ApprovedOriginForm(forms.ModelForm):
         model = ApprovedOrigin
         fields = [
             'origin',
+        ]
+
+
+class ApprovedSupplierForm(forms.ModelForm):
+    """ Approved Supplier Form """
+    class Meta:
+        model = ApprovedSupplier
+        fields = [
+            'supplier'
         ]
