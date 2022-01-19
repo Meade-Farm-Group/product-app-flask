@@ -40,6 +40,9 @@ class CommercialForm(forms.ModelForm):
             'created_on',
             'created_by',
         ]
+        widgets = {
+            'packed_here': forms.RadioSelect(),
+        }
 
 
 class OperationsForm(forms.ModelForm):
