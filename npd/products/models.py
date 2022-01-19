@@ -1,4 +1,5 @@
 from django.db import models
+from django import forms
 from django.contrib.auth.models import User
 from ancillaries.models import Customer, Department, Supplier, Defect
 from django.utils.translation import gettext_lazy as _
@@ -13,7 +14,10 @@ ORIGIN_CHOICES = get_origins()
 SUPPLIER_CHOICES = get_suppliers()
 PACKAGING_SUPPLIER_CHOICES = get_packaging_suppliers()
 
-WEIGHT_VALIDATOR = RegexValidator(r'[g, kg]$', "Must end with g or kg")
+class YesNoBoth(models.TextChoices):
+        YES = 'Y', _('Yes')
+        NO = 'N', _('No')
+        BOTH = 'B', _('Both')
 
 class ProductStatus(models.Model):
     status = models.CharField(max_length=40)
@@ -105,6 +109,11 @@ class CommercialModel(models.Model):
     best_before = models.CharField(max_length=20)
     julian_code = models.CharField(max_length=10)
     organic = models.BooleanField()
+    packed_here = models.CharField(
+        max_length=1, 
+        choices=YesNoBoth.choices, 
+        default=YesNoBoth.YES
+    )
     created_on = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
 
@@ -169,7 +178,7 @@ class FinishedProduct(models.Model):
 
     product = models.OneToOneField(Product, on_delete=models.CASCADE)
     declared_weight_volume = models.CharField(max_length=20)
-    tare_weight = models.CharField(max_length=20, validators=[WEIGHT_VALIDATOR])
+    tare_weight = models.CharField(max_length=20)
     e_mark = models.BooleanField()
     packaging_artwork_approved = models.BooleanField()
     created_on = models.DateTimeField(auto_now_add=True)
