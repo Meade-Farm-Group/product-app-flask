@@ -19,7 +19,13 @@
                                     <i class="fas fa-times text-danger"></i>
                                 </span>
                             {% else %}
-                                <span class="float-end">{{ value }}</span>
+                                {% if key.verbose_name == "delivered state" %}
+                                    <span class="float-end">{{ commercial_details.get_delivered_state_display }}</span>
+                                {% elif key.verbose_name == "packed here" %}
+                                    <span class="float-end">{{ commercial_details.get_packed_here_display }}</span>
+                                {% else %}
+                                    <span class="float-end">{{ value }}</span>
+                                {% endif %}
                             {% endif %}
                         {% endif %}
                     {% endwith %}
