@@ -1,5 +1,4 @@
 from django.template.defaulttags import register
-from django.db.models import ManyToManyField
 
 @register.filter
 def lookup(object, key):
