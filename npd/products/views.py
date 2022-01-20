@@ -1,13 +1,14 @@
+import datetime
+
 from django.contrib.auth.models import User
 from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.contrib.auth.decorators import login_required, permission_required
-from .models import *
-from .forms import *
 from django.contrib import messages
 from django.db.models import Q
+
+from .models import *
+from .forms import *
 from .decorators import check_product_status
-import datetime
-import base64
 
 
 @login_required
@@ -891,7 +892,7 @@ def add_approved_origin(request, product_id):
             return redirect(reverse(approved_origin_table, args=[product.id]))
     else:
         form = ApprovedOriginForm()
-    
+
     return render(request, 'products/approved_origin_form.html', {
         'product': product,
         'form': form,
@@ -949,7 +950,7 @@ def add_approved_variety(request, product_id):
             return redirect(reverse(approved_variety_table, args=[product.id]))
     else:
         form = ApprovedVarietyForm()
-    
+
     return render(request, 'products/approved_variety_form.html', {
         'product': product,
         'form': form,
@@ -1012,7 +1013,7 @@ def add_approved_supplier(request, product_id):
             )
     else:
         form = ApprovedSupplierForm()
-    
+
     return render(request, 'products/approved_supplier_form.html', {
         'product': product,
         'form': form,
@@ -1030,7 +1031,7 @@ def delete_approved_supplier(request, product_id, appr_supp_id):
         approved_supplier.delete()
         messages.warning(request, "Approved Supplier Successfully Deleted!")
         return redirect(reverse(product_details, args=[product.id]))
-    
+
     return render(request, 'products/confirm_delete.html', {
         'delete': 'Approved Supplier',
         'action': reverse(
