@@ -65,6 +65,9 @@ class Product(models.Model):
 
         checks = [
             CommercialModel,
+            ApprovedOrigin,
+            ApprovedVariety,
+            ApprovedSupplier,
             InnerPackaging,
             OuterPackaging,
             Palletisation,
