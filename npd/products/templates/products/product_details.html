@@ -5,7 +5,7 @@
 <div class="container">
     <div class="row">
         <div class="col-2">
-            <a id="back_button" href="{% url 'product_home' %}" class="btn btn-danger">
+            <a id="back_button" href="{% url 'upcoming_products' %}" class="btn btn-danger">
                 <i class="fas fa-arrow-left"></i> Back
             </a>
         </div>
@@ -21,6 +21,149 @@
         <div class="card-body">
             <div class="row">
                 {% include "products/includes/product_header.html" %}
+            </div>
+        </div>
+        <div class="accordion accordion-flush border-top" id="statusAccordion">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="statusHeadingOne">
+                    <button class="accordion-button collapsed text-center d-block" type="button" data-bs-toggle="collapse" data-bs-target="#statusCollapseOne" aria-expanded="false" aria-controls="statusCollapseOne">
+                        <b>Click To View Full Status</b> <i class="fas fa-chevron-down"></i>
+                    </button>
+                </h2>
+                <div id="statusCollapseOne" class="accordion-collapse collapse" aria-labelledby="statusHeadingOne" data-bs-parent="#statusAccordion">
+                    <div class="accordion-body">
+                        <div class="row">
+                            <div class="col-6">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        <strong>Commercial Details</strong>
+                                        <span class="float-end">
+                                            {% if commercial_details %}
+                                                <i class="fas fa-check text-success" aria-hidden="true"></i>
+                                            {% else %}
+                                                <i class="fas fa-times text-danger" aria-hidden="true"></i>
+                                            {% endif %}
+                                        </span>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <strong>Approved Origins</strong>
+                                        <span class="float-end">
+                                            {% if approved_origins.count > 0 %}
+                                                <i class="fas fa-check text-success" aria-hidden="true"></i>
+                                            {% else %}
+                                                <i class="fas fa-times text-danger" aria-hidden="true"></i>
+                                            {% endif %}
+                                        </span>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <strong>Approved Varieties</strong>
+                                        <span class="float-end">
+                                            {% if approved_varieties.count > 0 %}
+                                                <i class="fas fa-check text-success" aria-hidden="true"></i>
+                                            {% else %}
+                                                <i class="fas fa-times text-danger" aria-hidden="true"></i>
+                                            {% endif %}
+                                        </span>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <strong>Approved Suppliers</strong>
+                                        <span class="float-end">
+                                            {% if approved_suppliers.count > 0 %}
+                                                <i class="fas fa-check text-success" aria-hidden="true"></i>
+                                            {% else %}
+                                                <i class="fas fa-times text-danger" aria-hidden="true"></i>
+                                            {% endif %}
+                                        </span>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <strong>Inner Packaging</strong>
+                                        <span class="float-end">
+                                            {% if inner_packaging.count > 0 %}
+                                                <i class="fas fa-check text-success" aria-hidden="true"></i>
+                                            {% else %}
+                                                <i class="fas fa-times text-danger" aria-hidden="true"></i>
+                                            {% endif %}
+                                        </span>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <strong>Outer Packaging</strong>
+                                        <span class="float-end">
+                                            {% if outer_packaging.count > 0 %}
+                                                <i class="fas fa-check text-success" aria-hidden="true"></i>
+                                            {% else %}
+                                                <i class="fas fa-times text-danger" aria-hidden="true"></i>
+                                            {% endif %}
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-6">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        <strong>Palletisation</strong>
+                                        <span class="float-end">
+                                            {% if palletisation %}
+                                                <i class="fas fa-check text-success" aria-hidden="true"></i>
+                                            {% else %}
+                                                <i class="fas fa-times text-danger" aria-hidden="true"></i>
+                                            {% endif %}
+                                        </span>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <strong>Operations Details</strong>
+                                        <span class="float-end">
+                                            {% if operations_details %}
+                                                <i class="fas fa-check text-success" aria-hidden="true"></i>
+                                            {% else %}
+                                                <i class="fas fa-times text-danger" aria-hidden="true"></i>
+                                            {% endif %}
+                                        </span>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <strong>Defect Specs</strong>
+                                        <span class="float-end">
+                                            {% if defect_specs.count > 0 %}
+                                                <i class="fas fa-check text-success" aria-hidden="true"></i>
+                                            {% else %}
+                                                <i class="fas fa-times text-danger" aria-hidden="true"></i>
+                                            {% endif %}
+                                        </span>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <strong>Finished Product</strong>
+                                        <span class="float-end">
+                                            {% if finished_product %}
+                                                <i class="fas fa-check text-success" aria-hidden="true"></i>
+                                            {% else %}
+                                                <i class="fas fa-times text-danger" aria-hidden="true"></i>
+                                            {% endif %}
+                                        </span>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <strong>Prophet Details</strong>
+                                        <span class="float-end">
+                                            {% if prophet_details %}
+                                                <i class="fas fa-check text-success" aria-hidden="true"></i>
+                                            {% else %}
+                                                <i class="fas fa-times text-danger" aria-hidden="true"></i>
+                                            {% endif %}
+                                        </span>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <strong>Sign Off</strong>
+                                        <span class="float-end">
+                                            {% if product.signature %}
+                                                <i class="fas fa-check text-success" aria-hidden="true"></i>
+                                            {% else %}
+                                                <i class="fas fa-times text-danger" aria-hidden="true"></i>
+                                            {% endif %}
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="card-footer">
