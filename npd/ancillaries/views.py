@@ -36,7 +36,7 @@ def add_defect(request):
 
 
 @login_required
-@permission_required('product.add_finishedproduct', raise_exception=True)
+@permission_required('products.add_finishedproduct', raise_exception=True)
 def delete_defect(request, defect_id):
     defect = get_object_or_404(Defect, pk=defect_id)
 
@@ -55,7 +55,7 @@ def delete_defect(request, defect_id):
 
 
 @login_required
-@permission_required('product.add_finishedproduct', raise_exception=True)
+@permission_required('products.add_finishedproduct', raise_exception=True)
 def view_customers(request):
     customers = Customer.objects.all()
 
@@ -65,7 +65,7 @@ def view_customers(request):
 
 
 @login_required
-@permission_required('product.add_finishedproduct', raise_exception=True)
+@permission_required('products.add_finishedproduct', raise_exception=True)
 def add_customer(request):
     if request.method == 'POST':
         form = CustomerForm(request.POST)
