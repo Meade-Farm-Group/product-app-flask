@@ -52,8 +52,6 @@ INSTALLED_APPS = [
     # crispy forms
     'crispy_forms',
     'crispy_bootstrap5',
-    # other apps
-    'multiselectfield',
 ]
 
 MIDDLEWARE = [
