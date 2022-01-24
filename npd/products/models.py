@@ -85,6 +85,28 @@ class Product(models.Model):
 
     def __str__(self):
         return str(self.product_name) + " - " + str(self.customer)
+    
+    def outstanding_checks(self):
+        checks = [
+            (CommercialModel, 'Commercial'),
+            (ApprovedOrigin, 'Commercial'),
+            (ApprovedVariety, 'Commercial'),
+            (ApprovedSupplier, 'Commercial'),
+            (InnerPackaging, 'Packaging'),
+            (OuterPackaging, 'Packaging'),
+            (Palletisation, 'Packaging'),
+            (OperationsModel, 'Operations'),
+            (DefectSpecification, 'Technical'),
+            (FinishedProduct, 'Technical'),
+            (ProphetModel, 'Prophet'),
+        ]
+        
+        outstanding_checks = []
+        for check in checks:
+            if len(check[0].objects.filter(product=self)) == 0:
+                outstanding_checks.append(check[1])
+        
+        return outstanding_checks
 
 
 class CommercialModel(models.Model):
