@@ -54,5 +54,34 @@ def delete_defect(request, defect_id):
     })
 
 
+@login_required
+@permission_required('product.add_finishedproduct', raise_exception=True)
+def view_customers(request):
+    customers = Customer.objects.all()
 
-# Create your views here.
+    return render(request, 'ancillaries/customer_table.html', {
+        'customers': customers,
+    })
+
+
+@login_required
+@permission_required('product.add_finishedproduct', raise_exception=True)
+def add_customer(request):
+    if request.method == 'POST':
+        form = CustomerForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(
+                request, "Customer Successfully Added!"
+            )
+            return redirect(reverse(view_customers))
+        else:
+            messages.error(
+                request, 'Error Adding Customer! Please Try Again'
+            )
+    else:
+        form = CustomerForm()
+
+    return render(request, 'ancillaries/customer_form.html', {
+        'form': form,
+    })
