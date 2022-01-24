@@ -42,6 +42,20 @@
                                 </li>
                             {% endif %}
                             <li class="nav-item">
+                                <a href="{% url 'user_tasks' %}" class="nav-link">My Tasks</a>
+                            </li>
+                            {% if perms.products.add_finishedproduct %}
+                                <li class="nav-item dropdown">
+                                    <a href="#" class="nav-link dropdown-toggle" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Admin
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="adminDropdown">
+                                        <li><a href="{% url 'view_defects' %}" class="dropdown-item">Defects</a></li>
+                                        <li><a href="{% url 'view_customers' %}" class="dropdown-item">Customers</a></li>
+                                    </ul>
+                                </li>
+                            {% endif %}
+                            <li class="nav-item">
                                 <a class="nav-link" href="{% url 'account_logout' %}">Log Out</a>
                             </li>
                         {% else %}
