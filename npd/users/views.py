@@ -17,4 +17,5 @@ def user_tasks(request):
 
     return render(request, 'users/user_tasks.html', {
         'user_products': user_products,
+        'nbar': "user_tasks",
     })

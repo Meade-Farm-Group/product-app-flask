@@ -26,23 +26,23 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a>
+                            <a class="nav-link {% if nbar == 'home' %}active{% endif %}" aria-current="page" href="{% url 'home' %}">Home</a>
                         </li>
                         {% if user.is_authenticated %}
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'upcoming_products' %}">Upcoming Products</a>
+                                <a class="nav-link {% if nbar == 'upcoming_products' %}active{% endif %}" href="{% url 'upcoming_products' %}">Upcoming Products</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'product_home' %}">All Products</a>
+                                <a class="nav-link {% if nbar == 'all_products' %}active{% endif %}" href="{% url 'product_home' %}">All Products</a>
                             </li>
                             <!-- the perms object contains the users permissions, we want to check if they are allowed to create products -->
                             {% if perms.products.add_product %}
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{% url 'create_product' %}">Create New Product</a>
+                                    <a class="nav-link {% if nbar == 'edit_product' %}active{% endif %}" href="{% url 'create_product' %}">Create New Product</a>
                                 </li>
                             {% endif %}
                             <li class="nav-item">
-                                <a href="{% url 'user_tasks' %}" class="nav-link">My Tasks</a>
+                                <a href="{% url 'user_tasks' %}" class="nav-link {% if nbar == 'user_tasks' %}active{% endif %}">My Tasks</a>
                             </li>
                             {% if perms.products.add_finishedproduct %}
                                 <li class="nav-item dropdown">

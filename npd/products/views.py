@@ -16,7 +16,8 @@ def all_products(request):
     products = Product.objects.all()
 
     return render(request, 'products/product_table.html', {
-        'products': products
+        'products': products,
+        'nbar': "all_products" 
     })
 
 
@@ -37,6 +38,7 @@ def upcoming_products(request):
     return render(request, 'products/upcoming_products.html', {
         'upcoming_products': upcoming_products,
         'production_ready': production_ready,
+        'nbar': "upcoming_products",
     })
 
 
@@ -86,7 +88,8 @@ def product_details(request, product_id):
         'defect_spec_keys': DefectSpecification._meta.get_fields(),
         'prophet_details': prophet_details,
         'prophet_details_keys': ProphetModel._meta.get_fields(),
-        'exclude_fields': exclude_fields
+        'exclude_fields': exclude_fields,
+        'nbar': "upcoming_products",
     })
 
 
@@ -110,7 +113,8 @@ def create_product(request):
         form = ProductForm()
 
     return render(request, 'products/product_form.html', {
-        'form': form
+        'form': form,
+        'nbar': "edit_product",
     })
 
 
@@ -129,6 +133,7 @@ def edit_navigation(request, product_id):
         'commercial_details': commercial_details,
         'operations_details': operations_details,
         'prophet_details': prophet_details,
+        'nbar': "edit_product",
     })
 
 
@@ -169,7 +174,8 @@ def add_commercial_details(request, product_id):
     return render(request, 'products/commercial_form.html', {
         'context': 'add',
         'product': product,
-        'form': form
+        'form': form,
+        'nbar': "edit_product",
     })
 
 
@@ -202,7 +208,8 @@ def edit_commercial_details(request, product_id):
     return render(request, 'products/commercial_form.html', {
         'context': 'edit',
         'product': product,
-        'form': form
+        'form': form,
+        'nbar': "edit_product",
     })
 
 
@@ -238,7 +245,8 @@ def add_operations_details(request, product_id):
     return render(request, 'products/operations_form.html', {
         'context': 'add',
         'product': product,
-        'form': form
+        'form': form,
+        'nbar': "edit_product",
     })
 
 
@@ -266,7 +274,8 @@ def edit_operations_details(request, product_id):
     return render(request, 'products/operations_form.html', {
         'context': 'edit',
         'product': product,
-        'form': form
+        'form': form,
+        'nbar': "edit_product",
     })
 
 
@@ -280,6 +289,7 @@ def technical_navigation(request, product_id):
     return render(request, 'products/technical_navigation.html', {
         'product': product,
         'finished_spec': finished_spec,
+        'nbar': "edit_product",
     })
 
 
@@ -320,6 +330,7 @@ def add_finished_specification(request, product_id):
         'context': 'add',
         'product': product,
         'form': form,
+        'nbar': "edit_product",
     })
 
 
@@ -351,6 +362,7 @@ def edit_finished_specification(request, product_id):
         'context': 'edit',
         'product': product,
         'form': form,
+        'nbar': "edit_product",
     })
 
 
@@ -379,6 +391,7 @@ def add_defect_specification(request, product_id):
         'context': 'add',
         'product': product,
         'form': form,
+        'nbar': "edit_product",
     })
 
 
@@ -411,7 +424,8 @@ def edit_defect_specification(request, product_id, defect_spec_id):
         'context': 'edit',
         'product': product,
         'defect_spec': defect_spec,
-        'form': form
+        'form': form,
+        'nbar': "edit_product",
     })
 
 
@@ -425,6 +439,7 @@ def product_defects(request, product_id):
     return render(request, 'products/defect_table.html', {
         'product': product,
         'defects': defects,
+        'nbar': "edit_product",
     })
 
 
@@ -445,6 +460,7 @@ def delete_defect_specification(request, product_id, defect_spec_id):
         'action': reverse(
             delete_defect_specification, args=[product.id, defect_spec.id]),
         'cancel': reverse(product_details, args=[product.id]),
+        'nbar': "edit_product",
     })
 
 
@@ -476,7 +492,8 @@ def add_prophet_details(request, product_id):
     return render(request, 'products/prophet_form.html', {
         'context': 'add',
         'product': product,
-        'form': form
+        'form': form,
+        'nbar': "edit_product",
     })
 
 
@@ -502,7 +519,8 @@ def edit_prophet_details(request, product_id):
     return render(request, 'products/prophet_form.html', {
         'context': 'edit',
         'product': product,
-        'form': form
+        'form': form,
+        'nbar': "edit_product",
     })
 
 
@@ -516,6 +534,7 @@ def packaging_navigation(request, product_id):
     return render(request, 'products/packaging_navigation.html', {
         'product': product,
         'palletisation': palletisation,
+        'nbar': "edit_product",
     })
 
 
@@ -551,7 +570,8 @@ def add_palletisation_spec(request, product_id):
     return render(request, 'products/palletisation_form.html', {
         'context': 'add',
         'product': product,
-        'form': form
+        'form': form,
+        'nbar': "edit_product",
     })
 
 
@@ -580,7 +600,8 @@ def edit_palletisation_spec(request, product_id):
     return render(request, 'products/palletisation_form.html', {
         'context': 'edit',
         'product': product,
-        'form': form
+        'form': form,
+        'nbar': "edit_product",
     })
 
 
@@ -594,6 +615,7 @@ def inner_packaging_table(request, product_id):
     return render(request, 'products/inner_packaging_table.html', {
         'product': product,
         'inner_packaging': inner_packaging,
+        'nbar': "edit_product",
     })
 
 
@@ -623,7 +645,8 @@ def add_inner_packaging(request, product_id):
     return render(request, 'products/inner_packaging_form.html', {
         'context': 'add',
         'product': product,
-        'form': form
+        'form': form,
+        'nbar': "edit_product",
     })
 
 
@@ -653,7 +676,8 @@ def edit_inner_packaging(request, product_id, inner_pack_id):
         'context': 'edit',
         'product': product,
         'inner_packaging': inner_packaging,
-        'form': form
+        'form': form,
+        'nbar': "edit_product",
     })
 
 
@@ -667,6 +691,7 @@ def outer_packaging_table(request, product_id):
     return render(request, 'products/outer_packaging_table.html', {
         'product': product,
         'outer_packaging': outer_packaging,
+        'nbar': "edit_product",
     })
 
 
@@ -694,6 +719,7 @@ def add_outer_packaging(request, product_id):
         'context': 'add',
         'product': product,
         'form': form,
+        'nbar': "edit_product",
     })
 
 
@@ -723,7 +749,8 @@ def edit_outer_packaging(request, product_id, outer_pack_id):
         'context': 'edit',
         'product': product,
         'outer_packaging': outer_packaging,
-        'form': form
+        'form': form,
+        'nbar': "edit_product",
     })
 
 
@@ -745,6 +772,7 @@ def delete_outer_packaging(request, product_id, outer_pack_id):
             delete_outer_packaging,
             args=[product.id, outer_packaging.id]),
         'cancel': reverse(product_details, args=[product.id]),
+        'nbar': "edit_product",
     })
 
 
@@ -766,6 +794,7 @@ def delete_inner_packaging(request, product_id, inner_pack_id):
             delete_inner_packaging,
             args=[product.id, inner_packaging.id]),
         'cancel': reverse(product_details, args=[product.id]),
+        'nbar': "edit_product",
     })
 
 
@@ -783,7 +812,8 @@ def delete_product(request, product_id):
     return render(request, 'products/confirm_delete.html', {
         'delete': 'Product',
         'action': reverse(delete_product, args=[product.id]),
-        'cancel': reverse(product_details, args=[product.id])
+        'cancel': reverse(product_details, args=[product.id]),
+        'nbar': "edit_product",
     })
 
 
@@ -818,6 +848,7 @@ def signoff_product(request, product_id):
     return render(request, 'products/signoff_form.html', {
         'product': product,
         'form': form,
+        'nbar': "edit_product",
     })
 
 
@@ -845,7 +876,8 @@ def reopen_product(request, product_id):
         'action': reverse(
             reopen_product, args=[product.id]
         ),
-        'cancel': reverse(product_details, args=[product.id])
+        'cancel': reverse(product_details, args=[product.id]),
+        'nbar': "edit_product",
     })
 
 
@@ -859,6 +891,7 @@ def commercial_navigation(request, product_id):
     return render(request, 'products/commercial_navigation.html', {
         'product': product,
         'commercial_model': commercial_model,
+        'nbar': "edit_product",
     })
 
 
@@ -872,6 +905,7 @@ def approved_origin_table(request, product_id):
     return render(request, 'products/approved_origins_table.html', {
         'product': product,
         'approved_origins': approved_origins,
+        'nbar': "edit_product",
     })
 
 
@@ -896,6 +930,7 @@ def add_approved_origin(request, product_id):
     return render(request, 'products/approved_origin_form.html', {
         'product': product,
         'form': form,
+        'nbar': "edit_product",
     })
 
 
@@ -917,6 +952,7 @@ def delete_approved_origin(request, product_id, appr_orig_id):
             delete_approved_origin,
             args=[product.id, approved_origin.id]),
         'cancel': reverse(product_details, args=[product.id]),
+        'nbar': "edit_product",
     })
 
 
@@ -930,6 +966,7 @@ def approved_variety_table(request, product_id):
     return render(request, 'products/approved_varieties_table.html', {
         'product': product,
         'approved_varieties': approved_varieties,
+        'nbar': "edit_product",
     })
 
 
@@ -954,6 +991,7 @@ def add_approved_variety(request, product_id):
     return render(request, 'products/approved_variety_form.html', {
         'product': product,
         'form': form,
+        'nbar': "edit_product",
     })
 
 
@@ -975,6 +1013,7 @@ def delete_approved_variety(request, product_id, appr_var_id):
             delete_approved_variety,
             args=[product.id, approved_variety.id]),
         'cancel': reverse(product_details, args=[product.id]),
+        'nbar': "edit_product",
     })
 
 
@@ -988,6 +1027,7 @@ def approved_supplier_table(request, product_id):
     return render(request, 'products/approved_suppliers_table.html', {
         'product': product,
         'approved_suppliers': approved_suppliers,
+        'nbar': "edit_product",
     })
 
 
@@ -1017,6 +1057,7 @@ def add_approved_supplier(request, product_id):
     return render(request, 'products/approved_supplier_form.html', {
         'product': product,
         'form': form,
+        'nbar': "edit_product",
     })
 
 
@@ -1038,5 +1079,6 @@ def delete_approved_supplier(request, product_id, appr_supp_id):
             delete_approved_supplier,
             args=[product.id, approved_supplier.id]
         ),
-        'cancel': reverse(product_details, args=[product.id])
+        'cancel': reverse(product_details, args=[product.id]),
+        'nbar': "edit_product",
     })
