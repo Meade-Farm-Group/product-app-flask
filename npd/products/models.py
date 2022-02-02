@@ -121,7 +121,7 @@ class CommercialModel(models.Model):
     legal_product_description = models.CharField(max_length=40)
     case_count = models.IntegerField()
     weight_per_unit = models.CharField(max_length=20)
-    product_code = models.IntegerField()
+    product_code = models.IntegerField(verbose_name='Supplier Product Code')
     delivered_state = models.CharField(
         max_length=2,
         choices=DeliveredState.choices,
@@ -131,8 +131,8 @@ class CommercialModel(models.Model):
     product_outer_barcode = models.IntegerField()
     size_diameter = models.CharField(max_length=40)
     storage_temperature = models.CharField(max_length=40)
-    display_until = models.CharField(max_length=20)
-    best_before = models.CharField(max_length=20)
+    display_until = models.CharField(max_length=20, verbose_name='Display Until (days)')
+    best_before = models.CharField(max_length=20, verbose_name='Best Before (days)')
     julian_code = models.CharField(max_length=10)
     organic = models.BooleanField()
     packed_here = models.CharField(

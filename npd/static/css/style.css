@@ -8,3 +8,7 @@
     border: 2px solid black;
     width: 100%;
 }
+
+body {
+    padding-top: 5.5rem;
+}

@@ -41,6 +41,11 @@ class CommercialForm(forms.ModelForm):
             'created_on',
             'created_by',
         ]
+        labels = {
+            "product_code": "Supplier Product Code",
+            "display_until": "Display Until (days)",
+            "best_before": "Best Before (days)",
+        }
         widgets = {
             'packed_here': forms.RadioSelect(),
         }
