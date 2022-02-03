@@ -29,6 +29,7 @@ def outstanding_tasks(user, product):
         "Commercial": [
             CommercialModel,
             ApprovedOrigin,
+            ApprovedVariety,
             ApprovedSupplier,
         ],
         "Packaging": [
