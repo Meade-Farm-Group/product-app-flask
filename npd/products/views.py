@@ -1,6 +1,7 @@
 import datetime
 
 from django.contrib.auth.models import User
+from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import messages
@@ -1082,3 +1083,34 @@ def delete_approved_supplier(request, product_id, appr_supp_id):
         'cancel': reverse(product_details, args=[product.id]),
         'nbar': "edit_product",
     })
+
+
+# testing purposes only
+def call_all_products(request):
+    data = {
+        "data": [
+            {
+                "id": "1",
+                "name": "Pomegranate",
+                "department": "Fruit",
+                "customer": "Iceland",
+                "start_date": "Dec 1. 2021",
+                "status": "Completed - Production Ready",
+                "created_on": "Nov. 24 2021",
+                "created_by": "jamessummersby",
+                "action": "1"
+            },
+            {
+                "id": "1",
+                "name": "Apple",
+                "department": "Fruit",
+                "customer": "Iceland",
+                "start_date": "Dec 1. 2021",
+                "status": "Completed - Production Ready",
+                "created_on": "Nov. 24 2021",
+                "created_by": "jamessummersby",
+                "action": "1"
+            }
+        ]
+    }
+    return JsonResponse(data)
