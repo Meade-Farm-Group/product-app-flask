@@ -48,12 +48,13 @@ def outstanding_tasks(user, product):
             ProphetModel,
         ]
     }
-    outstanding_tasks = product.outstanding_checks()
+    # outstanding_tasks = product.outstanding_checks()
     user_group = user.groups.all().first().name
     
     user_outstanding = []
 
-    if user_group in outstanding_tasks:
+    # if user_group in outstanding_tasks:
+    if user_group in checks:
         for model in checks[user_group]:
             done = False
             if len(model.objects.filter(product=product)) > 0:
@@ -62,5 +63,14 @@ def outstanding_tasks(user, product):
                 "name": model._meta.verbose_name.title(), 
                 "done": done,
             })
+    
+    if user_group == "Commercial":
+        done = False
+        if product.signature:
+            done=True
+        user_outstanding.append({
+            "name": "Commercial Sign Off",
+            "done": done,
+        })
 
     return user_outstanding

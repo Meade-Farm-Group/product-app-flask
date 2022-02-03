@@ -22,27 +22,29 @@
             <div class="row">
                 {% include "products/includes/product_header.html" %}
             </div>
-            {% with user_outstanding=request.user|outstanding_tasks:product %}
-                {% if user_outstanding|length > 0 %}
-                    <hr>
-                    <div class="row">
-                        <h5 class="text-center">Your Outstanding Tasks</h5>
+            {% if not product.is_ready %}
+                {% with user_outstanding=request.user|outstanding_tasks:product %}
+                    {% if user_outstanding|length > 0 %}
                         <hr>
-                        <ul class="list-group list-group-flush">
-                            {% for task in user_outstanding %}
-                                <li class="list-group-item text-center {% if task.done %}text-success{% else %}text-danger{% endif %}">
-                                    {{ task.name }} 
-                                    {% if task.done %}
-                                        <i class="fas fa-check text-success" aria-hidden="true"></i>
-                                    {% else %}
-                                        <i class="fas fa-times text-danger" aria-hidden="true"></i>
-                                    {% endif %}
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                {% endif %}
-            {% endwith %}
+                        <div class="row">
+                            <h5 class="text-center">Your Outstanding Tasks</h5>
+                            <hr>
+                            <ul class="list-group list-group-flush">
+                                {% for task in user_outstanding %}
+                                    <li class="list-group-item text-center {% if task.done %}text-success{% else %}text-danger{% endif %}">
+                                        {{ task.name }} 
+                                        {% if task.done %}
+                                            <i class="fas fa-check text-success" aria-hidden="true"></i>
+                                        {% else %}
+                                            <i class="fas fa-times text-danger" aria-hidden="true"></i>
+                                        {% endif %}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                {% endwith %}
+            {% endif %}
         </div>
         <div class="accordion accordion-flush border-top" id="statusAccordion">
             <div class="accordion-item">
