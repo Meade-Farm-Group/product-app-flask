@@ -44,4 +44,5 @@ urlpatterns = [
     path('<int:product_id>/packaging/outer_packaging/<int:outer_pack_id>/delete', views.delete_outer_packaging, name='delete_outer_packaging'),
     path('<int:product_id>/signoff', views.signoff_product, name='signoff_product'),
     path('<int:product_id>/reopen/', views.reopen_product, name='reopen_product'),
+    path('all_product_json', views.call_all_products, name="call_all_products"),
 ]
