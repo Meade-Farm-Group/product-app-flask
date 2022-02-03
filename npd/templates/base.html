@@ -44,7 +44,7 @@
                             <!-- Check if user is in group "Viewer" -->
                             {% if not request.user|is_viewer %}
                                 <li class="nav-item">
-                                    <a href="{% url 'user_tasks' %}" class="nav-link {% if nbar == 'user_tasks' %}active{% endif %}">My Tasks</a>
+                                    <a href="{% url 'user_tasks' %}" class="nav-link {% if nbar == 'user_tasks' %}active{% endif %}">Outstanding Tasks</a>
                                 </li>
                             {% endif %}
                             {% if perms.products.add_finishedproduct %}
