@@ -146,6 +146,9 @@ class CommercialModel(models.Model):
     def __str__(self):
         return f'{self.product} Commercial Details'
 
+    class Meta:
+        verbose_name = "Commercial Details"
+
 
 class ApprovedOrigin(models.Model):
     product = models.ForeignKey(Product, null=True, on_delete=models.CASCADE)
@@ -153,6 +156,9 @@ class ApprovedOrigin(models.Model):
 
     def __str__(self):
         return f'{self.product} - {self.origin}'
+
+    class Meta:
+        verbose_name = "Approved Origins"
 
 
 class ApprovedVariety(models.Model):
@@ -162,6 +168,9 @@ class ApprovedVariety(models.Model):
     def __str__(self):
         return f'{self.product} - {self.variety}'
 
+    class Meta:
+        verbose_name = "Approved Varieties"
+
 
 class ApprovedSupplier(models.Model):
     product = models.ForeignKey(Product, null=True, on_delete=models.CASCADE)
@@ -169,6 +178,9 @@ class ApprovedSupplier(models.Model):
 
     def __str__(self):
         return f'{self.product} - {self.supplier}'
+
+    class Meta:
+        verbose_name = "Approved Suppliers"
 
 
 class OperationsModel(models.Model):
@@ -199,6 +211,9 @@ class OperationsModel(models.Model):
     def __str__(self):
         return f'{self.product} Operations Details'
 
+    class Meta:
+        verbose_name = "Operations Details"
+
 
 class FinishedProduct(models.Model):
 
@@ -213,6 +228,9 @@ class FinishedProduct(models.Model):
     def __str__(self):
         return f'{self.product} Finished Product Specification'
 
+    class Meta:
+        verbose_name = "Finished Product Details"
+
 
 class DefectSpecification(models.Model):
 
@@ -225,6 +243,9 @@ class DefectSpecification(models.Model):
     def __str__(self):
         return f'{self.product} - {self.defect} Defect Specification'
 
+    class Meta:
+        verbose_name = "Defect Specification Details"
+
 
 class ProphetModel(models.Model):
     product = models.OneToOneField(Product, on_delete=models.CASCADE)
@@ -236,6 +257,9 @@ class ProphetModel(models.Model):
 
     def __str__(self):
         return f'{self.product} Prophet Model'
+
+    class Meta:
+        verbose_name = "Prophet Details"
 
 
 class InnerPackaging(models.Model):
@@ -278,6 +302,9 @@ class InnerPackaging(models.Model):
     def __str__(self):
         return f'{self.product} Inner Packaging Details'
 
+    class Meta:
+        verbose_name = "Inner Packaging Details"
+
 
 class OuterPackaging(models.Model):
     class PackagingTypes(models.TextChoices):
@@ -304,6 +331,9 @@ class OuterPackaging(models.Model):
     def __str__(self):
         return f'{self.product} Outer Packaging Details'
 
+    class Meta:
+        verbose_name = "Outer Packaging Details"
+
 
 class Palletisation(models.Model):
     product = models.OneToOneField(Product, on_delete=models.CASCADE)
@@ -314,3 +344,6 @@ class Palletisation(models.Model):
 
     def __str__(self):
         return f'{self.product} Palletisation Details'
+
+    class Meta:
+        verbose_name = "Palletisation Details"
