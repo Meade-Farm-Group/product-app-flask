@@ -1,5 +1,5 @@
 {% load static %}
-
+{% load lookup %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -41,9 +41,12 @@
                                     <a class="nav-link {% if nbar == 'edit_product' %}active{% endif %}" href="{% url 'create_product' %}">Create New Product</a>
                                 </li>
                             {% endif %}
-                            <li class="nav-item">
-                                <a href="{% url 'user_tasks' %}" class="nav-link {% if nbar == 'user_tasks' %}active{% endif %}">My Tasks</a>
-                            </li>
+                            <!-- Check if user is in group "Viewer" -->
+                            {% if not request.user|is_viewer %}
+                                <li class="nav-item">
+                                    <a href="{% url 'user_tasks' %}" class="nav-link {% if nbar == 'user_tasks' %}active{% endif %}">My Tasks</a>
+                                </li>
+                            {% endif %}
                             {% if perms.products.add_finishedproduct %}
                                 <li class="nav-item dropdown">
                                     <a href="#" class="nav-link dropdown-toggle" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
