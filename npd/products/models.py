@@ -31,7 +31,6 @@ class ProductStatus(models.Model):
 
 class Product(models.Model):
     product_name = models.CharField(max_length=40)
-    product_description = models.CharField(null=True, max_length=10)
     department = models.ForeignKey(
         Department, null=True, on_delete=models.SET_NULL)
     customer = models.ForeignKey(
