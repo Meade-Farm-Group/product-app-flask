@@ -9,10 +9,6 @@ from .models import Profile
 
 class CustomSignupForm(SignupForm):
 
-    role = forms.ModelChoiceField(
-        queryset=Group.objects.all(),
-        required=True
-    )
     department = forms.ModelChoiceField(
         queryset=Department.objects.all(),
         required=True
@@ -24,6 +20,7 @@ class CustomSignupForm(SignupForm):
             user=user,
             department=self.cleaned_data['department']
         )
-        user.groups.add(self.cleaned_data['role'])
+        viewer_group = Group.objects.get(name='Viewer')
+        user.groups.add(viewer_group)
         profile.save()
         return user
